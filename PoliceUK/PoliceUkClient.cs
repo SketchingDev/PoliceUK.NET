@@ -4,6 +4,7 @@
     using PoliceUk.Entities;
     using PoliceUk.Exceptions;
     using PoliceUk.Request;
+    using PoliceUK.Entities;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -50,6 +51,15 @@
             IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
 
             return ProcessRequest<Category[]>(request);
+        }
+
+        public IEnumerable<ForceShortDescription> Forces()
+        {
+            string url = string.Format("{0}forces", ApiPath);
+
+            IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
+
+            return ProcessRequest<ForceShortDescription[]>(request);
         }
 
         private T ProcessRequest<T>(IHttpWebRequest request) where T : class

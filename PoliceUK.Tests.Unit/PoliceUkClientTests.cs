@@ -4,6 +4,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PoliceUk.Entities;
     using PoliceUk.Request;
+    using PoliceUK.Entities;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -138,6 +139,82 @@
         #endregion
 
         #region Street-level Crimes
+        #endregion
+
+        #region Forces
+
+        [TestMethod]
+        public void Forces_Call_Parses_No_Elements_From_Json_Repsonse()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUkApi.Tests.Unit.TestData.EmptyArray.json"))
+            {
+                IPoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+
+                IEnumerable<ForceShortDescription> forces = policeApi.Forces();
+
+                // Assert
+                Assert.IsNotNull(forces);
+                Assert.AreEqual(0, forces.Count());
+            }
+        }
+
+        [TestMethod]
+        public void Forces_Call_Parses_Single_Element_From_Json_Repsonse()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUkApi.Tests.Unit.TestData.Forces.Single.json"))
+            {
+                IPoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+                IEnumerable<ForceShortDescription> forces = policeApi.Forces();
+
+                // Assert
+                Assert.IsNotNull(forces);
+
+                ForceShortDescription force = forces.First();
+                Assert.AreEqual(new ForceShortDescription()
+                {
+                    ID = "avon-and-somerset",
+                    Name = "Avon and Somerset Constabulary"
+                }, force);
+            }
+        }
+
+        [TestMethod]
+        public void Forces_Call_Parses_Multiple_Elements_From_Json_Repsonse()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUkApi.Tests.Unit.TestData.Forces.Multiple.json"))
+            {
+                IPoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+                IEnumerable<ForceShortDescription> forces = policeApi.Forces();
+
+                // Assert
+                Assert.IsNotNull(forces);
+                Assert.AreEqual(2, forces.Count());
+
+                ForceShortDescription force = forces.First();
+                Assert.AreEqual(new ForceShortDescription()
+                {
+                    ID = "avon-and-somerset",
+                    Name = "Avon and Somerset Constabulary"
+                }, force);
+
+                force = forces.Last();
+                Assert.AreEqual(new ForceShortDescription()
+                {
+                    ID = "bedfordshire",
+                    Name = "Bedfordshire Police"
+                }, force);
+            }
+        }
+
         #endregion
     }
 }

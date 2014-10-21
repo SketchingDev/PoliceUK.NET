@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\Crime.cs" />
+    <Compile Include="Entities\ForceShortDescription.cs" />
     <Compile Include="Entities\Location\CrimeLocation.cs" />
     <Compile Include="Entities\Location\Street.cs" />
     <Compile Include="Entities\OutcomeStatus.cs" />

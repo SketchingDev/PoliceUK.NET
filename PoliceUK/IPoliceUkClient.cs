@@ -1,10 +1,9 @@
 ﻿namespace PoliceUk
 {
     using PoliceUk.Entities;
-    using PoliceUK.Entities;
+    using PoliceUK.Entities.Force;
     using System;
     using System.Collections.Generic;
-    using System.Runtime.Serialization;
 
     public interface IPoliceUkClient
     {
@@ -29,9 +28,12 @@
         /// A list of all the police forces available via the API.
         /// Unique force identifiers obtained here are used in requests for force-specific data via other methods. 
         /// </summary>
-        IEnumerable<ForceShortDescription> Forces();
+        IEnumerable<ForceSummary> Forces();
 
-        // TODO ForceFullDescription Force(string id); //http://data.police.uk/api/forces/leicestershire
-
+        /// <summary>
+        /// Get details about a specific force.
+        /// </summary>
+        /// <param name="id">Unique force identifier. These are available from <see cref="Forces()"/>.</param>
+        IEnumerable<ForceSummary> Force(string id);
     }
 }

@@ -1,15 +1,15 @@
-﻿namespace PoliceUK.Entities
+﻿namespace PoliceUK.Entities.Force
 {
     using System.Runtime.Serialization;
 
     [DataContract]
-    public class ForceShortDescription
+    public class ForceSummary
     {
         /// <summary>
         /// Unique force identifier
         /// </summary>
         [DataMember(Name = "id")]
-        public string ID { get; set; } // TODO Turn into enum?
+        public string Id { get; set; } // TODO Turn into enum?
 
         /// <summary>
         /// Force name

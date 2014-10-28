@@ -11,6 +11,6 @@
 
         IWebProxy Proxy { get; set; }
 
-        IWebResponse GetResponse();
+        IHttpWebResponse GetResponse();
     }
 }

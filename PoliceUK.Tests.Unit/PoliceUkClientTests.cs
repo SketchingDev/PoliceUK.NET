@@ -3,8 +3,11 @@
     using FakeItEasy;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PoliceUk.Entities;
+    using PoliceUk.Entities.Location;
     using PoliceUk.Request;
-    using PoliceUK.Entities;
+    using PoliceUK.Entities.Force;
+    using PoliceUK.Tests.Unit.CustomAssertions;
+    using PoliceUK.Tests.Unit.CustomAssertions.Equality;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -16,7 +19,7 @@
     {
         private static IHttpWebRequestFactory CreateRequestFactory(Stream streamResponse)
         {
-            var response = A.Fake<IWebResponse>();
+            var response = A.Fake<IHttpWebResponse>();
             A.CallTo(() => response.GetResponseStream()).Returns(streamResponse);
 
             var request = A.Fake<IHttpWebRequest>();
@@ -44,9 +47,9 @@
         #region Crime Categories tests
 
         [TestMethod]
-        public void CrimeRategories_Call_Contains_Date_In_Request()
+        public void CrimeCategories_Call_Contains_Date_In_Request()
         {
-            using (Stream stream = GetTestDataFromResource("PoliceUkApi.Tests.Unit.TestData.EmptyArray.json"))
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.EmptyArray.json"))
             {
                 PoliceUkClient policeApi = new PoliceUkClient()
                 {
@@ -67,7 +70,7 @@
         [TestMethod]
         public void CrimeCategories_Call_Parses_No_Elements_From_Json_Repsonse()
         {
-            using (Stream stream = GetTestDataFromResource("PoliceUkApi.Tests.Unit.TestData.EmptyArray.json"))
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.EmptyArray.json"))
             {
                 IPoliceUkClient policeApi = new PoliceUkClient()
                 {
@@ -85,7 +88,7 @@
         [TestMethod]
         public void CrimeCategories_Call_Parses_Single_Element_From_Json_Repsonse()
         {
-            using (Stream stream = GetTestDataFromResource("PoliceUkApi.Tests.Unit.TestData.CrimeCatagories.Single.json"))
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.CrimeCatagories.Single.json"))
             {
                 IPoliceUkClient policeApi = new PoliceUkClient()
                 {
@@ -97,18 +100,18 @@
                 Assert.IsNotNull(categories);
 
                 Category category = categories.First();
-                Assert.AreEqual(new Category()
+                CustomAssert.AreEqual(new Category()
                 {
                     Url = "burglary",
                     Name = "Burglary"
-                }, category);
+                }, category, new CategoryEqualityComparer());
             }
         }
 
         [TestMethod]
         public void CrimeCategories_Call_Parses_Multiple_Elements_From_Json_Repsonse()
         {
-            using (Stream stream = GetTestDataFromResource("PoliceUkApi.Tests.Unit.TestData.CrimeCatagories.Multiple.json"))
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.CrimeCatagories.Multiple.json"))
             {
                 IPoliceUkClient policeApi = new PoliceUkClient()
                 {
@@ -121,24 +124,192 @@
                 Assert.AreEqual(2, categories.Count());
 
                 Category category = categories.First();
-                Assert.AreEqual(new Category()
+                CustomAssert.AreEqual(new Category()
                 {
                     Url = "all-crime",
                     Name = "All crime and ASB"
-                }, category);
+                }, category, new CategoryEqualityComparer());
 
                 category = categories.Last();
-                Assert.AreEqual(new Category()
+                CustomAssert.AreEqual(new Category()
                 {
                     Url = "burglary",
                     Name = "Burglary"
-                }, category);
+                }, category, new CategoryEqualityComparer());
             }
         }
 
         #endregion
 
-        #region Street-level Crimes
+        #region Street-level Crimes (Latitude/Longitude)
+
+        [TestMethod]
+        public void StreetLevelLatLng_Call_Contains_Date_In_Request()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.EmptyArray.json"))
+            {
+                PoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+
+                DateTime nowDateTime = DateTime.Now;
+                string formattedDateTime = nowDateTime.ToString("yyyy'-'MM");
+
+                IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>(), nowDateTime);
+
+                // Assert
+                IHttpWebRequestFactory factory = policeApi.RequestFactory;
+                A.CallTo(() => factory.Create(A<string>.That.Contains(formattedDateTime))).MustHaveHappened();
+            }
+        }
+
+        [TestMethod]
+        public void StreetLevelLatLng_Call_Contains_LatLng_In_Request()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.EmptyArray.json"))
+            {
+                PoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+
+                var geoPosition = new Geoposition(123, 456);
+
+                IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(geoPosition);
+
+                // Assert
+                IHttpWebRequestFactory factory = policeApi.RequestFactory;
+                A.CallTo(() => factory.Create(A<string>.That.Contains(geoPosition.Latitiude.ToString()))).MustHaveHappened();
+                A.CallTo(() => factory.Create(A<string>.That.Contains(geoPosition.Longitude.ToString()))).MustHaveHappened();
+            }
+        }
+
+        [TestMethod]
+        public void StreetLevelLatLng_Call_Parses_No_Elements_From_Json_Repsonse()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.EmptyArray.json"))
+            {
+                IPoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+
+                IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>());
+
+                // Assert
+                Assert.IsNotNull(crimes);
+                Assert.AreEqual(0, crimes.Count());
+            }
+        }
+
+        [TestMethod]
+        public void StreetLevelLatLng_Call_Parses_Single_Element_From_Json_Repsonse()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Single.json"))
+            {
+                IPoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+                IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>());
+
+                // Assert
+                Assert.IsNotNull(crimes);
+
+                Crime crime = crimes.First();
+                CustomAssert.AreEqual(new Crime()
+                {
+                    Category = "burglary",
+                    PersistentId = "aebd220e869a235ba92cde43f7e0df29001573b3df1b094bb952820b2b8f44b0",
+                    LocationType = "Force",
+                    LocationSubtype = "",
+                    Id = "20604632",
+                    Location = new CrimeLocation(){
+                        Latitude = 52.6271606,
+                        Longitude = -1.1485111,
+                        Street = new Street(){
+                            Id = 882208,
+                            Name = "On or near Norman Street"
+                        }
+                    },
+                    Context = "Example context",
+                    Month = "2013-01",
+                    OutcomeStatus = new OutcomeStatus() {
+                        Category = "Under investigation",
+                        Date = "2013-01"
+                    }
+                }, crime, new CrimeEqualityComparer());
+            }
+        }
+
+        [TestMethod]
+        public void StreetLevelLatLng_Call_Parses_Multiple_Elements_From_Json_Repsonse()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Multiple.json"))
+            {
+                IPoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+                IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>());
+
+                // Assert
+                Assert.IsNotNull(crimes);
+                Assert.AreEqual(2, crimes.Count());
+
+                Crime crime = crimes.First();
+                CustomAssert.AreEqual(new Crime()
+                {
+                    Category = "anti-social-behaviour",
+                    PersistentId = "",
+                    LocationType = "Force",
+                    LocationSubtype = "",
+                    Id = "20599642",
+                    Location = new CrimeLocation()
+                    {
+                        Latitude = 52.6269479,
+                        Longitude = -1.1121716,
+                        Street = new Street()
+                        {
+                            Id = 882380,
+                            Name = "On or near Cedar Road"
+                        }
+                    },
+                    Context = "",
+                    Month = "2013-01",
+                    OutcomeStatus = null
+                }, crime, new CrimeEqualityComparer());
+
+                crime = crimes.Last();
+                CustomAssert.AreEqual(new Crime()
+                {
+                    Category = "burglary",
+                    PersistentId = "aebd220e869a235ba92cde43f7e0df29001573b3df1b094bb952820b2b8f44b0",
+                    LocationType = "Force",
+                    LocationSubtype = "",
+                    Id = "20604632",
+                    Location = new CrimeLocation()
+                    {
+                        Latitude = 52.6271606,
+                        Longitude = -1.1485111,
+                        Street = new Street()
+                        {
+                            Id = 882208,
+                            Name = "On or near Norman Street"
+                        }
+                    },
+                    Context = "Example context",
+                    Month = "2013-01",
+                    OutcomeStatus = new OutcomeStatus()
+                    {
+                        Category = "Under investigation",
+                        Date = "2013-01"
+                    }
+                }, crime, new CrimeEqualityComparer());
+            }
+        }
+        
         #endregion
 
         #region Forces
@@ -146,14 +317,14 @@
         [TestMethod]
         public void Forces_Call_Parses_No_Elements_From_Json_Repsonse()
         {
-            using (Stream stream = GetTestDataFromResource("PoliceUkApi.Tests.Unit.TestData.EmptyArray.json"))
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.EmptyArray.json"))
             {
                 IPoliceUkClient policeApi = new PoliceUkClient()
                 {
                     RequestFactory = CreateRequestFactory(stream)
                 };
 
-                IEnumerable<ForceShortDescription> forces = policeApi.Forces();
+                IEnumerable<ForceSummary> forces = policeApi.Forces();
 
                 // Assert
                 Assert.IsNotNull(forces);
@@ -164,56 +335,60 @@
         [TestMethod]
         public void Forces_Call_Parses_Single_Element_From_Json_Repsonse()
         {
-            using (Stream stream = GetTestDataFromResource("PoliceUkApi.Tests.Unit.TestData.Forces.Single.json"))
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Forces.Single.json"))
             {
                 IPoliceUkClient policeApi = new PoliceUkClient()
                 {
                     RequestFactory = CreateRequestFactory(stream)
                 };
-                IEnumerable<ForceShortDescription> forces = policeApi.Forces();
+                IEnumerable<ForceSummary> forces = policeApi.Forces();
 
                 // Assert
                 Assert.IsNotNull(forces);
 
-                ForceShortDescription force = forces.First();
-                Assert.AreEqual(new ForceShortDescription()
+                ForceSummary force = forces.First();
+                CustomAssert.AreEqual(new ForceSummary()
                 {
-                    ID = "avon-and-somerset",
+                    Id = "avon-and-somerset",
                     Name = "Avon and Somerset Constabulary"
-                }, force);
+                }, force, new ForceSummaryEqualityComparer());
             }
         }
 
         [TestMethod]
         public void Forces_Call_Parses_Multiple_Elements_From_Json_Repsonse()
         {
-            using (Stream stream = GetTestDataFromResource("PoliceUkApi.Tests.Unit.TestData.Forces.Multiple.json"))
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Forces.Multiple.json"))
             {
                 IPoliceUkClient policeApi = new PoliceUkClient()
                 {
                     RequestFactory = CreateRequestFactory(stream)
                 };
-                IEnumerable<ForceShortDescription> forces = policeApi.Forces();
+                IEnumerable<ForceSummary> forces = policeApi.Forces();
 
                 // Assert
                 Assert.IsNotNull(forces);
                 Assert.AreEqual(2, forces.Count());
 
-                ForceShortDescription force = forces.First();
-                Assert.AreEqual(new ForceShortDescription()
+                ForceSummary force = forces.First();
+                CustomAssert.AreEqual(new ForceSummary()
                 {
-                    ID = "avon-and-somerset",
+                    Id = "avon-and-somerset",
                     Name = "Avon and Somerset Constabulary"
-                }, force);
+                }, force, new ForceSummaryEqualityComparer());
 
                 force = forces.Last();
-                Assert.AreEqual(new ForceShortDescription()
+                CustomAssert.AreEqual(new ForceSummary()
                 {
-                    ID = "bedfordshire",
+                    Id = "bedfordshire",
                     Name = "Bedfordshire Police"
-                }, force);
+                }, force, new ForceSummaryEqualityComparer());
             }
         }
+
+        #endregion
+
+        #region Force
 
         #endregion
     }

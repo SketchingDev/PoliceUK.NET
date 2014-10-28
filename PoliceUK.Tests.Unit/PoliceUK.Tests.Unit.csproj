@@ -53,6 +53,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CustomAssertions\CustomAssert.cs" />
+    <Compile Include="CustomAssertions\Equality\AbstractEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\CategoryEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\CrimeEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\Location\CrimeLocationEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\ForceSummaryEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\Location\StreetEqualityComparer.cs" />
     <Compile Include="PoliceUkClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -71,6 +78,7 @@
     <EmbeddedResource Include="TestData\StreetLevelCrimes.Single.json" />
     <EmbeddedResource Include="TestData\Forces.Multiple.json" />
     <EmbeddedResource Include="TestData\Forces.Single.json" />
+    <None Include="TestData\Force.json" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

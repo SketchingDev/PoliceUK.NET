@@ -1,0 +1,21 @@
+﻿{
+    "description": null,
+    "url": "http:\/\/www.leics.police.uk\/",
+    "engagement_methods": [
+        {
+            "url": "http:\/\/www.facebook.com\/leicspolice",
+            "type": "facebook",
+            "description": null,
+            "title": "facebook"
+        },
+        {
+            "url": "",
+            "type": "telephone",
+            "description": null,
+            "title": "telephone"
+        }
+    ],
+    "telephone": "101",
+    "id": "leicestershire",
+    "name": "Leicestershire Police"
+}

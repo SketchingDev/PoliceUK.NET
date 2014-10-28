@@ -46,7 +46,9 @@
   <ItemGroup>
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\Crime.cs" />
-    <Compile Include="Entities\ForceShortDescription.cs" />
+    <Compile Include="Entities\Force\ForceDetails.cs" />
+    <Compile Include="Entities\Force\ForceSummary.cs" />
+    <Compile Include="Entities\Force\ForceEngagementMethod.cs" />
     <Compile Include="Entities\Location\CrimeLocation.cs" />
     <Compile Include="Entities\Location\Street.cs" />
     <Compile Include="Entities\OutcomeStatus.cs" />
@@ -60,9 +62,9 @@
     <Compile Include="Request\HttpWebRequestWrapper.cs" />
     <Compile Include="Request\IHttpWebRequest.cs" />
     <Compile Include="Request\IWebRequestFactory.cs" />
-    <Compile Include="Request\Response\IWebResponse.cs" />
-    <Compile Include="Request\Response\WebResponseWrapper.cs" />
-    <Compile Include="Request\WebRequestFactory.cs" />
+    <Compile Include="Request\Response\IHttpWebResponse.cs" />
+    <Compile Include="Request\Response\HttpWebResponseWrapper.cs" />
+    <Compile Include="Request\HttpWebRequestFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

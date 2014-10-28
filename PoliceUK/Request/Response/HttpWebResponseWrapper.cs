@@ -4,11 +4,19 @@
     using System.IO;
     using System.Net;
 
-    public class WebResponseWrapper : IWebResponse
+    public class HttpWebResponseWrapper : IHttpWebResponse
     {
-        private WebResponse response;
+        private HttpWebResponse response;
 
-        public WebResponseWrapper(WebResponse response)
+        public HttpStatusCode StatusCode
+        {
+            get
+            {
+                return this.response.StatusCode;
+            }
+        }
+
+        public HttpWebResponseWrapper(HttpWebResponse response)
         {
             if (response == null)
             {

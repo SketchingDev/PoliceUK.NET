@@ -2,9 +2,11 @@
 {
     using System;
     using System.IO;
+    using System.Net;
 
-    public interface IWebResponse : IDisposable
+    public interface IHttpWebResponse : IDisposable
     {
+        HttpStatusCode StatusCode {get;}
         Stream GetResponseStream();
     }
 }

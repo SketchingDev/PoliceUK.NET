@@ -5,11 +5,13 @@
     using PoliceUk.Exceptions;
     using PoliceUk.Request;
     using PoliceUK.Entities;
+    using PoliceUK.Entities.Force;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Net;
 
+    // TODO Handle not found
     // TODO Make Async
     public class PoliceUkClient : IPoliceUkClient
     {
@@ -53,13 +55,23 @@
             return ProcessRequest<Category[]>(request);
         }
 
-        public IEnumerable<ForceShortDescription> Forces()
+        public IEnumerable<ForceSummary> Forces()
         {
             string url = string.Format("{0}forces", ApiPath);
 
             IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
 
-            return ProcessRequest<ForceShortDescription[]>(request);
+            return ProcessRequest<ForceSummary[]>(request);
+        }
+
+        //TODO Handle not found status code
+        public IEnumerable<ForceSummary> Force(string id)
+        {
+            string url = string.Format("{0}forces/{1}", ApiPath, id);
+
+            IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
+
+            return ProcessRequest<ForceSummary[]>(request);
         }
 
         private T ProcessRequest<T>(IHttpWebRequest request) where T : class
@@ -67,7 +79,7 @@
             T data = null;
             try
             {
-                using (IWebResponse response = request.GetResponse())
+                using (IHttpWebResponse response = request.GetResponse())
                 {
                     data = ProcessWebResponse<T>(response);
                 }
@@ -81,7 +93,7 @@
             return data;
         }
 
-        private T ProcessWebResponse<T>(IWebResponse response) where T : class
+        private T ProcessWebResponse<T>(IHttpWebResponse response) where T : class
         {
             T data = null;
 

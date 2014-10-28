@@ -34,9 +34,11 @@
             this.webRequest = request;
         }
 
-        public IWebResponse GetResponse()
+        public IHttpWebResponse GetResponse()
         {
-            return new WebResponseWrapper(this.webRequest.GetResponse());
+            var response = (HttpWebResponse)this.webRequest.GetResponse();
+
+            return new HttpWebResponseWrapper(response);
         }
     }
 }

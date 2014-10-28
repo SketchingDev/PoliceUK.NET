@@ -3,7 +3,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PoliceUk;
     using PoliceUk.Entities;
-    using PoliceUK.Entities;
+    using PoliceUK.Entities.Force;
     using System;
     using System.Collections.Generic;
     using System.Linq;

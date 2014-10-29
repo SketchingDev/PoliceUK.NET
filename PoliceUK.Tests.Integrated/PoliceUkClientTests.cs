@@ -52,5 +52,16 @@
             ForceSummary force = forces.First();
             Assert.IsNotNull(force.Id);
         }
+
+        [TestMethod]
+        public void Force_Call_Returns_Results()
+        {
+            PoliceUkClient policeApi = new PoliceUkClient();
+
+            ForceDetails force = policeApi.Force("leicestershire");
+
+            Assert.IsNotNull(force);
+            Assert.IsNotNull(force.Id);
+        }
     }
 }

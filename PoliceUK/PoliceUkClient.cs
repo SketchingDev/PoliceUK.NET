@@ -65,13 +65,13 @@
         }
 
         //TODO Handle not found status code
-        public IEnumerable<ForceSummary> Force(string id)
+        public ForceDetails Force(string id)
         {
             string url = string.Format("{0}forces/{1}", ApiPath, id);
 
             IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
 
-            return ProcessRequest<ForceSummary[]>(request);
+            return ProcessRequest<ForceDetails>(request);
         }
 
         private T ProcessRequest<T>(IHttpWebRequest request) where T : class

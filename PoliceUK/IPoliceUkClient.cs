@@ -34,6 +34,6 @@
         /// Get details about a specific force.
         /// </summary>
         /// <param name="id">Unique force identifier. These are available from <see cref="Forces()"/>.</param>
-        IEnumerable<ForceSummary> Force(string id);
+        ForceDetails Force(string id);
     }
 }

@@ -31,7 +31,7 @@
         /// Unique force identifier.
         /// </summary>
         [DataMember(Name = "id")]
-        public string ID { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Force name.

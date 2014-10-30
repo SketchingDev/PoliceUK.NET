@@ -454,7 +454,7 @@
         // TODO Force_Call_Parses_No_Elements_From_Json_Repsonse()
 
         [TestMethod]
-        public void Forces_Call_Parses_Single_Element_From_Json_Repsonse()
+        public void Force_Call_Parses_Single_Element_From_Json_Repsonse()
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Force.json"))
             {
@@ -498,37 +498,6 @@
                     Description = "This is yet another example description",
                     Title = "telephone"
                 }, engagementMethod, new ForceEngagementMethodEqualityComparer());
-            }
-        }
-
-        [TestMethod]
-        public void Forces_Call_Parses_Multiple_Elements_From_Json_Repsonse()
-        {
-            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Forces.Multiple.json"))
-            {
-                IPoliceUkClient policeApi = new PoliceUkClient()
-                {
-                    RequestFactory = CreateRequestFactory(stream)
-                };
-                IEnumerable<ForceSummary> forces = policeApi.Forces();
-
-                // Assert
-                Assert.IsNotNull(forces);
-                Assert.AreEqual(2, forces.Count());
-
-                ForceSummary force = forces.First();
-                CustomAssert.AreEqual(new ForceSummary()
-                {
-                    Id = "avon-and-somerset",
-                    Name = "Avon and Somerset Constabulary"
-                }, force, new ForceSummaryEqualityComparer());
-
-                force = forces.Last();
-                CustomAssert.AreEqual(new ForceSummary()
-                {
-                    Id = "bedfordshire",
-                    Name = "Bedfordshire Police"
-                }, force, new ForceSummaryEqualityComparer());
             }
         }
 

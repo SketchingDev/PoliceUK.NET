@@ -1,17 +1,17 @@
 ﻿{
-    "description": null,
+    "description": "This is an example description",
     "url": "http:\/\/www.leics.police.uk\/",
     "engagement_methods": [
         {
             "url": "http:\/\/www.facebook.com\/leicspolice",
             "type": "facebook",
-            "description": null,
+            "description": "This is another example description",
             "title": "facebook"
         },
         {
             "url": "",
             "type": "telephone",
-            "description": null,
+            "description": "This is yet another example description",
             "title": "telephone"
         }
     ],

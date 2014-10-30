@@ -57,6 +57,8 @@
     <Compile Include="CustomAssertions\Equality\AbstractEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\CategoryEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\CrimeEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\ForceDetails\ForceDetailsEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\ForceDetails\ForceEngagementMethodEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\Location\CrimeLocationEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\ForceSummaryEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\Location\StreetEqualityComparer.cs" />
@@ -79,6 +81,7 @@
     <EmbeddedResource Include="TestData\Forces.Multiple.json" />
     <EmbeddedResource Include="TestData\Forces.Single.json" />
     <EmbeddedResource Include="TestData\Malformed.json" />
+    <EmbeddedResource Include="TestData\Empty.json" />
     <None Include="TestData\Force.json" />
   </ItemGroup>
   <Choose>

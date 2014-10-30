@@ -47,6 +47,21 @@
         #region Crime Categories tests
 
         [TestMethod]
+        [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
+        public void CrimeCategories_Call_With_Malformed_Response_Throwns_InvalidDataException()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Malformed.json"))
+            {
+                PoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+
+                policeApi.CrimeCategories(DateTime.Now);
+            }
+        }
+
+        [TestMethod]
         public void CrimeCategories_Call_Contains_Date_In_Request()
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.EmptyArray.json"))

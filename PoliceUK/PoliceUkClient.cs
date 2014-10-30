@@ -4,17 +4,21 @@
     using PoliceUk.Entities;
     using PoliceUk.Exceptions;
     using PoliceUk.Request;
-    using PoliceUK.Entities;
     using PoliceUK.Entities.Force;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Net;
 
-    // TODO Handle not found
     // TODO Make Async
     public class PoliceUkClient : IPoliceUkClient
     {
+        private class ParsedResponse<T>
+        {
+            public HttpStatusCode StatusCode;
+            public T Data;
+        }
+
         private const string ApiPath = "http://data.police.uk/api/";
 
         /// <summary>
@@ -41,8 +45,13 @@
             if (date.HasValue) url += string.Format("&date={0:yyyy'-'MM}", date.Value);
 
             IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
+            ParsedResponse<Crime[]> response = ProcessRequest<Crime[]>(request);
 
-            return ProcessRequest<Crime[]>(request);
+            /* If a custom area contains more than 10,000 crimes, the API will return a 503 status code.
+             * response.StatusCode == HttpStatusCode.ServiceUnavailable
+             */
+
+            return response.Data;
         }
 
         public IEnumerable<Category> CrimeCategories(DateTime date)
@@ -51,8 +60,9 @@
                 date);
 
             IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
+            ParsedResponse<Category[]> response = ProcessRequest<Category[]>(request);
 
-            return ProcessRequest<Category[]>(request);
+            return response.Data;
         }
 
         public IEnumerable<ForceSummary> Forces()
@@ -60,8 +70,9 @@
             string url = string.Format("{0}forces", ApiPath);
 
             IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
+            ParsedResponse<ForceSummary[]> response = ProcessRequest<ForceSummary[]>(request);
 
-            return ProcessRequest<ForceSummary[]>(request);
+            return response.Data;
         }
 
         //TODO Handle not found status code
@@ -70,18 +81,20 @@
             string url = string.Format("{0}forces/{1}", ApiPath, id);
 
             IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
+            ParsedResponse<ForceDetails> response = ProcessRequest<ForceDetails>(request);
 
-            return ProcessRequest<ForceDetails>(request);
+            return response.Data;
         }
 
-        private T ProcessRequest<T>(IHttpWebRequest request) where T : class
+        private ParsedResponse<T> ProcessRequest<T>(IHttpWebRequest request) where T : class
         {
-            T data = null;
+            var response = new ParsedResponse<T>();
             try
             {
-                using (IHttpWebResponse response = request.GetResponse())
+                using (IHttpWebResponse httpResponse = request.GetResponse())
                 {
-                    data = ProcessWebResponse<T>(response);
+                    response.StatusCode = httpResponse.StatusCode;
+                    response.Data = ProcessWebResponse<T>(httpResponse);
                 }
             }
             catch (Exception e)
@@ -90,7 +103,7 @@
                 throw new DataRequestException(message, e);
             }
 
-            return data;
+            return response;
         }
 
         private T ProcessWebResponse<T>(IHttpWebResponse response) where T : class

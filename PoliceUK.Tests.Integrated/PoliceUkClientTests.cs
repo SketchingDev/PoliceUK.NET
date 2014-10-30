@@ -54,7 +54,7 @@
         }
 
         [TestMethod]
-        public void Force_Call_Returns_Results()
+        public void Force_Call_Returns_Result()
         {
             PoliceUkClient policeApi = new PoliceUkClient();
 
@@ -62,6 +62,16 @@
 
             Assert.IsNotNull(force);
             Assert.IsNotNull(force.Id);
+        }
+
+        [TestMethod]
+        public void Force_Call_With_No_Result_Returns_Null()
+        {
+            PoliceUkClient policeApi = new PoliceUkClient();
+
+            ForceDetails force = policeApi.Force("");
+
+            Assert.IsNull(force);
         }
     }
 }

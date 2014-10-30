@@ -97,10 +97,18 @@
                     response.Data = ProcessWebResponse<T>(httpResponse);
                 }
             }
-            catch (Exception e)
+            catch (WebException ex)
             {
-                string message = "Failed to request crime data from " + request.RequestUri;
-                throw new DataRequestException(message, e);
+                if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null)
+                {
+                    var httpResponse = (HttpWebResponse) ex.Response;
+                    response.StatusCode = httpResponse.StatusCode;
+                }
+                else
+                {
+                    string message = "Failed to request crime data from " + request.RequestUri;
+                    throw new DataRequestException(message, ex);
+                }
             }
 
             return response;

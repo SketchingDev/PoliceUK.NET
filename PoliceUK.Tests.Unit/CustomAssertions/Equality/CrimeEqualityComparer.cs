@@ -21,7 +21,6 @@
             Assert.AreEqual(crimeOne.LocationSubtype, crimeTwo.LocationSubtype);
 
             return locationComparer.Equals(crimeOne.Location, crimeTwo.Location);
-
         }
     }
 }

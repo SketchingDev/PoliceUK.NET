@@ -6,10 +6,10 @@
 
     public class ForceSummaryEqualityComparer : AbstractEqualityComparer<ForceSummary>
     {
-        public override bool AreEqual(ForceSummary forceDescOne, ForceSummary forceDescTwo)
+        public override bool AreEqual(ForceSummary forceSummeryOne, ForceSummary forceSummeryTwo)
         {
-            Assert.AreEqual(forceDescOne.Id, forceDescTwo.Id);
-            Assert.AreEqual(forceDescOne.Name, forceDescTwo.Name);
+            Assert.AreEqual(forceSummeryOne.Id, forceSummeryTwo.Id);
+            Assert.AreEqual(forceSummeryOne.Name, forceSummeryTwo.Name);
 
             return true;
         }

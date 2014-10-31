@@ -26,11 +26,32 @@
         }
 
         [TestMethod]
-        public void StreetLevelCrimes_Call_Returns_Results()
+        public void StreetLevelCrimes_Point_Call_Returns_Results()
         {
             PoliceUkClient policeApi = new PoliceUkClient();
 
             IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(new Geoposition(51.513016, -0.10231));
+
+            Assert.IsNotNull(crimes);
+            Assert.AreEqual(true, crimes.Count() > 0);
+
+            Crime crime = crimes.First();
+            Assert.IsNotNull(crime.Id);
+        }
+
+        [TestMethod]
+        public void StreetLevelCrimes_Polygon_Call_Returns_Results()
+        {
+            PoliceUkClient policeApi = new PoliceUkClient();
+
+            var polygon = new Geoposition[4] {
+                new Geoposition(50.181460, -5.419521),
+                new Geoposition(50.193935,-5.394716),
+                new Geoposition(50.196353,-5.402184),
+                new Geoposition(50.184263,-5.424070)
+            };
+
+            IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(polygon);
 
             Assert.IsNotNull(crimes);
             Assert.AreEqual(true, crimes.Count() > 0);

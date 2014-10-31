@@ -343,6 +343,73 @@
         
         #endregion
 
+        #region Street-level Crimes (Polygon)
+
+        [TestMethod]
+        [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
+        public void StreetLevelPolygon_Call_With_Malformed_Response_Throwns_InvalidDataException()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Malformed.json"))
+            {
+                PoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+
+                policeApi.StreetLevelCrimes(A.Fake<IEnumerable<IGeoposition>>(), DateTime.Now);
+            }
+        }
+
+        [TestMethod]
+        public void StreetLevelPolygon_Call_Contains_Date_In_Request()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.EmptyArray.json"))
+            {
+                PoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+
+                DateTime nowDateTime = DateTime.Now;
+                string formattedDateTime = nowDateTime.ToString("yyyy'-'MM");
+
+                IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(A.Fake<IEnumerable<IGeoposition>>(), nowDateTime);
+
+                // Assert
+                IHttpWebRequestFactory factory = policeApi.RequestFactory;
+                A.CallTo(() => factory.Create(A<string>.That.Contains(formattedDateTime))).MustHaveHappened();
+            }
+        }
+
+        [TestMethod]
+        public void StreetLevelPolygon_Call_Contains_LatLng_In_Request()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.EmptyArray.json"))
+            {
+                PoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream)
+                };
+
+                var geoPositions = new Geoposition[] {
+                    new Geoposition(123, 456),
+                    new Geoposition(789, 012)
+                };
+
+                IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(geoPositions);
+
+                // Assert
+                IHttpWebRequestFactory factory = policeApi.RequestFactory;
+                A.CallTo(() => factory.Create(A<string>.That.Contains(geoPositions[0].Latitiude.ToString()))).MustHaveHappened();
+                A.CallTo(() => factory.Create(A<string>.That.Contains(geoPositions[0].Longitude.ToString()))).MustHaveHappened();
+
+                A.CallTo(() => factory.Create(A<string>.That.Contains(geoPositions[1].Latitiude.ToString()))).MustHaveHappened();
+                A.CallTo(() => factory.Create(A<string>.That.Contains(geoPositions[1].Longitude.ToString()))).MustHaveHappened();
+            }
+        }
+
+        #endregion
+
         #region Forces
 
         [TestMethod]

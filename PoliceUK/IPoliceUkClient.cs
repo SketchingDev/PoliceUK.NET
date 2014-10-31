@@ -8,7 +8,7 @@
     public interface IPoliceUkClient
     {
         /// <summary>
-        /// Crimes at street-level; either within a 1 mile radius of a single point, or within a custom area.
+        /// Crimes at street-level; within a 1 mile radius of a single point.
         /// 
         /// IMPORTANT NOTE: The street-level crimes returned in the API are only an approximation of where 
         /// the actual crimes occurred, they are NOT the exact locations.
@@ -18,6 +18,18 @@
         /// The latest month will be shown by default.
         /// </param>
         IEnumerable<Crime> StreetLevelCrimes(IGeoposition position, DateTime? date = null);
+
+        /// <summary>
+        /// Crimes at street-level; within a custom area.
+        /// 
+        /// IMPORTANT NOTE: The street-level crimes returned in the API are only an approximation of where 
+        /// the actual crimes occurred, they are NOT the exact locations.
+        /// </summary>
+        /// <param name="poly">The lat/lng pairs which define the boundary of the custom area</param>
+        /// <param name="date">Optional. (YYYY-MM) Limit results to a specific month.
+        /// The latest month will be shown by default.
+        /// </param>
+        IEnumerable<Crime> StreetLevelCrimes(IEnumerable<IGeoposition> polygon, DateTime? date = null);
 
         /// <summary>
         /// Returns a list of valid categories for a given data set date.

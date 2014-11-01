@@ -163,9 +163,8 @@
                 {
                     data = serialiser.Deserialize<T>(jsonReader);
                 }
-                catch (JsonReaderException ex)
+                catch (JsonException ex)
                 {
-                    // Error parsing JSON data
                     throw new PoliceUk.Exceptions.InvalidDataException("Failed to deserialise crime data", ex);
                 }
             }

@@ -13,6 +13,12 @@
     [TestClass]
     public class Forces : BaseMethodTests
     {
+        private static readonly ForceSummary TestSummary = new ForceSummary()
+                {
+                    Id = "avon-and-somerset",
+                    Name = "Avon and Somerset Constabulary"
+                };
+
         [TestMethod]
         [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
         public void Call_With_Malformed_Response_Throwns_InvalidDataException()
@@ -61,11 +67,7 @@
                 Assert.IsNotNull(forces);
 
                 ForceSummary force = forces.First();
-                CustomAssert.AreEqual(new ForceSummary()
-                {
-                    Id = "avon-and-somerset",
-                    Name = "Avon and Somerset Constabulary"
-                }, force, new ForceSummaryEqualityComparer());
+                CustomAssert.AreEqual(TestSummary, force, new ForceSummaryEqualityComparer());
             }
         }
 
@@ -85,11 +87,7 @@
                 Assert.AreEqual(2, forces.Count());
 
                 ForceSummary force = forces.First();
-                CustomAssert.AreEqual(new ForceSummary()
-                {
-                    Id = "avon-and-somerset",
-                    Name = "Avon and Somerset Constabulary"
-                }, force, new ForceSummaryEqualityComparer());
+                CustomAssert.AreEqual(TestSummary, force, new ForceSummaryEqualityComparer());
 
                 force = forces.Last();
                 CustomAssert.AreEqual(new ForceSummary()

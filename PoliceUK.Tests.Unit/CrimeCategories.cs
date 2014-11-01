@@ -16,6 +16,13 @@
     [TestClass]
     public class CrimeCategories : BaseMethodTests
     {
+        private static readonly Category TestCategory = 
+            new Category()
+                {
+                    Url = "burglary",
+                    Name = "Burglary"
+                };
+
         [TestMethod]
         [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
         public void Call_With_Malformed_Response_Throwns_InvalidDataException()
@@ -85,11 +92,7 @@
                 Assert.IsNotNull(categories);
 
                 Category category = categories.First();
-                CustomAssert.AreEqual(new Category()
-                {
-                    Url = "burglary",
-                    Name = "Burglary"
-                }, category, new CategoryEqualityComparer());
+                CustomAssert.AreEqual(TestCategory, category, new CategoryEqualityComparer());
             }
         }
 
@@ -116,11 +119,7 @@
                 }, category, new CategoryEqualityComparer());
 
                 category = categories.Last();
-                CustomAssert.AreEqual(new Category()
-                {
-                    Url = "burglary",
-                    Name = "Burglary"
-                }, category, new CategoryEqualityComparer());
+                CustomAssert.AreEqual(TestCategory, category, new CategoryEqualityComparer());
             }
         }
     }

@@ -16,7 +16,7 @@
         [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
         public void Call_With_Malformed_Response_Throwns_InvalidDataException()
         {
-            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Malformed.json"))
+            using (Stream stream = GetTestDataFromResource(MalformedTestDataResource))
             {
                 PoliceUkClient policeApi = new PoliceUkClient()
                 {
@@ -28,6 +28,24 @@
         }
 
         // TODO Force_Call_Parses_No_Elements_From_Json_Repsonse()
+
+        //[TestMethod]
+        //public void Call_Parses_No_Elements_From_Json_Repsonse()
+        //{
+        //    using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
+        //    {
+        //        IPoliceUkClient policeApi = new PoliceUkClient()
+        //        {
+        //            RequestFactory = CreateRequestFactory(stream)
+        //        };
+
+        //        ForceDetails force = policeApi.CrimeCategories(DateTime.Now);
+
+        //        // Assert
+        //        Assert.IsNotNull(categories);
+        //        Assert.AreEqual(0, categories.Count());
+        //    }
+        //}
 
         [TestMethod]
         public void Call_Parses_Single_Element_From_Json_Repsonse()

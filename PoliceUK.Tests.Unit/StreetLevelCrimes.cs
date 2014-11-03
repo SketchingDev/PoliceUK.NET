@@ -46,6 +46,13 @@
                 };
 
             [TestMethod]
+            [ExpectedException(typeof(ArgumentNullException))]
+            public void Call_With_Null_Position_Throws_ArgumentNullException()
+            {
+                (new PoliceUkClient()).StreetLevelCrimes((IGeoposition)null);
+            }
+
+            [TestMethod]
             [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
             public void Call_With_Malformed_Response_Throwns_InvalidDataException()
             {
@@ -191,6 +198,13 @@
 
         public class PolygonOverride
         {
+            [TestMethod]
+            [ExpectedException(typeof(ArgumentNullException))]
+            public void Call_With_Null_Position_Throws_ArgumentNullException()
+            {
+                (new PoliceUkClient()).StreetLevelCrimes((IEnumerable<IGeoposition>)null);
+            }
+
             [TestMethod]
             [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
             public void Call_With_Malformed_Response_Throwns_InvalidDataException()

@@ -7,6 +7,7 @@
     using PoliceUk.Entities.Location;
     using PoliceUk.Request;
     using PoliceUk.Tests.Unit;
+    using PoliceUK.Entities;
     using PoliceUK.Tests.Unit.CustomAssertions;
     using PoliceUK.Tests.Unit.CustomAssertions.Equality;
     using System;
@@ -18,6 +19,32 @@
     {
         public class LatLngOverride
         {
+            private static readonly Crime TestCrime = new Crime()
+                {
+                    Category = "burglary",
+                    PersistentId = "aebd220e869a235ba92cde43f7e0df29001573b3df1b094bb952820b2b8f44b0",
+                    LocationType = "Force",
+                    LocationSubtype = "",
+                    Id = "20604632",
+                    Location = new CrimeLocation()
+                    {
+                        Latitude = 52.6271606,
+                        Longitude = -1.1485111,
+                        Street = new Street()
+                        {
+                            Id = 882208,
+                            Name = "On or near Norman Street"
+                        }
+                    },
+                    Context = "Example context",
+                    Month = "2013-01",
+                    OutcomeStatus = new OutcomeStatus()
+                    {
+                        Category = "Under investigation",
+                        Date = "2013-01"
+                    }
+                };
+
             [TestMethod]
             [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
             public void Call_With_Malformed_Response_Throwns_InvalidDataException()
@@ -46,7 +73,7 @@
                     DateTime nowDateTime = DateTime.Now;
                     string formattedDateTime = nowDateTime.ToString("yyyy'-'MM");
 
-                    IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>(), nowDateTime);
+                    policeApi.StreetLevelCrimes(A.Fake<IGeoposition>(), nowDateTime);
 
                     // Assert
                     IHttpWebRequestFactory factory = policeApi.RequestFactory;
@@ -66,7 +93,7 @@
 
                     var geoPosition = new Geoposition(123, 456);
 
-                    IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(geoPosition);
+                    policeApi.StreetLevelCrimes(geoPosition);
 
                     // Assert
                     IHttpWebRequestFactory factory = policeApi.RequestFactory;
@@ -85,11 +112,12 @@
                         RequestFactory = CreateRequestFactory(stream)
                     };
 
-                    IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>());
+                    StreetLevelCrimeResults result = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>());
 
                     // Assert
-                    Assert.IsNotNull(crimes);
-                    Assert.AreEqual(0, crimes.Count());
+                    Assert.IsNotNull(result);
+                    Assert.IsNotNull(result.Crimes);
+                    Assert.AreEqual(0, result.Crimes.Count());
                 }
             }
 
@@ -102,37 +130,15 @@
                     {
                         RequestFactory = CreateRequestFactory(stream)
                     };
-                    IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>());
+
+                    StreetLevelCrimeResults result = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>());
 
                     // Assert
-                    Assert.IsNotNull(crimes);
+                    Assert.IsNotNull(result);
+                    Assert.IsNotNull(result.Crimes);
 
-                    Crime crime = crimes.First();
-                    CustomAssert.AreEqual(new Crime()
-                    {
-                        Category = "burglary",
-                        PersistentId = "aebd220e869a235ba92cde43f7e0df29001573b3df1b094bb952820b2b8f44b0",
-                        LocationType = "Force",
-                        LocationSubtype = "",
-                        Id = "20604632",
-                        Location = new CrimeLocation()
-                        {
-                            Latitude = 52.6271606,
-                            Longitude = -1.1485111,
-                            Street = new Street()
-                            {
-                                Id = 882208,
-                                Name = "On or near Norman Street"
-                            }
-                        },
-                        Context = "Example context",
-                        Month = "2013-01",
-                        OutcomeStatus = new OutcomeStatus()
-                        {
-                            Category = "Under investigation",
-                            Date = "2013-01"
-                        }
-                    }, crime, new CrimeEqualityComparer());
+                    Crime crime = result.Crimes.First();
+                    CustomAssert.AreEqual(TestCrime, crime, new CrimeEqualityComparer());
                 }
             }
 
@@ -145,13 +151,16 @@
                     {
                         RequestFactory = CreateRequestFactory(stream)
                     };
-                    IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>());
+
+                    StreetLevelCrimeResults result = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>());
 
                     // Assert
-                    Assert.IsNotNull(crimes);
-                    Assert.AreEqual(2, crimes.Count());
+                    Assert.IsNotNull(result);
+                    Assert.IsNotNull(result.Crimes);
 
-                    Crime crime = crimes.First();
+                    Assert.AreEqual(2, result.Crimes.Count());
+
+                    Crime crime = result.Crimes.First();
                     CustomAssert.AreEqual(new Crime()
                     {
                         Category = "anti-social-behaviour",
@@ -174,32 +183,8 @@
                         OutcomeStatus = null
                     }, crime, new CrimeEqualityComparer());
 
-                    crime = crimes.Last();
-                    CustomAssert.AreEqual(new Crime()
-                    {
-                        Category = "burglary",
-                        PersistentId = "aebd220e869a235ba92cde43f7e0df29001573b3df1b094bb952820b2b8f44b0",
-                        LocationType = "Force",
-                        LocationSubtype = "",
-                        Id = "20604632",
-                        Location = new CrimeLocation()
-                        {
-                            Latitude = 52.6271606,
-                            Longitude = -1.1485111,
-                            Street = new Street()
-                            {
-                                Id = 882208,
-                                Name = "On or near Norman Street"
-                            }
-                        },
-                        Context = "Example context",
-                        Month = "2013-01",
-                        OutcomeStatus = new OutcomeStatus()
-                        {
-                            Category = "Under investigation",
-                            Date = "2013-01"
-                        }
-                    }, crime, new CrimeEqualityComparer());
+                    crime = result.Crimes.Last();
+                    CustomAssert.AreEqual(TestCrime, crime, new CrimeEqualityComparer());
                 }
             }
         }
@@ -234,7 +219,7 @@
                     DateTime nowDateTime = DateTime.Now;
                     string formattedDateTime = nowDateTime.ToString("yyyy'-'MM");
 
-                    IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(A.Fake<IEnumerable<IGeoposition>>(), nowDateTime);
+                    policeApi.StreetLevelCrimes(A.Fake<IEnumerable<IGeoposition>>(), nowDateTime);
 
                     // Assert
                     IHttpWebRequestFactory factory = policeApi.RequestFactory;
@@ -257,7 +242,7 @@
                         new Geoposition(789, 012)
                     };
 
-                    IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(geoPositions);
+                    policeApi.StreetLevelCrimes(geoPositions);
 
                     // Assert
                     IHttpWebRequestFactory factory = policeApi.RequestFactory;

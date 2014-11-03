@@ -1,6 +1,7 @@
 ﻿namespace PoliceUk
 {
     using PoliceUk.Entities;
+    using PoliceUK.Entities;
     using PoliceUK.Entities.Force;
     using System;
     using System.Collections.Generic;
@@ -17,7 +18,7 @@
         /// <param name="date">Optional. (YYYY-MM) Limit results to a specific month.
         /// The latest month will be shown by default.
         /// </param>
-        IEnumerable<Crime> StreetLevelCrimes(IGeoposition position, DateTime? date = null);
+        StreetLevelCrimeResults StreetLevelCrimes(IGeoposition position, DateTime? date = null);
 
         /// <summary>
         /// Crimes at street-level; within a custom area.
@@ -29,7 +30,7 @@
         /// <param name="date">Optional. (YYYY-MM) Limit results to a specific month.
         /// The latest month will be shown by default.
         /// </param>
-        IEnumerable<Crime> StreetLevelCrimes(IEnumerable<IGeoposition> polygon, DateTime? date = null);
+        StreetLevelCrimeResults StreetLevelCrimes(IEnumerable<IGeoposition> polygon, DateTime? date = null);
 
         /// <summary>
         /// Returns a list of valid categories for a given data set date.

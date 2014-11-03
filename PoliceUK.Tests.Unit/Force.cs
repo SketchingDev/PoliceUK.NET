@@ -27,25 +27,22 @@
             }
         }
 
-        // TODO Force_Call_Parses_No_Elements_From_Json_Repsonse()
+        [TestMethod]
+        public void Call_Parses_No_Element_From_Json_Repsonse()
+        {
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Force.NotFound.txt"))
+            {
+                IPoliceUkClient policeApi = new PoliceUkClient()
+                {
+                    RequestFactory = CreateRequestFactory(stream, System.Net.HttpStatusCode.NotFound)
+                };
 
-        //[TestMethod]
-        //public void Call_Parses_No_Elements_From_Json_Repsonse()
-        //{
-        //    using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
-        //    {
-        //        IPoliceUkClient policeApi = new PoliceUkClient()
-        //        {
-        //            RequestFactory = CreateRequestFactory(stream)
-        //        };
+                ForceDetails force = policeApi.Force("");
 
-        //        ForceDetails force = policeApi.CrimeCategories(DateTime.Now);
-
-        //        // Assert
-        //        Assert.IsNotNull(categories);
-        //        Assert.AreEqual(0, categories.Count());
-        //    }
-        //}
+                // Assert
+                Assert.IsNull(force);
+            }
+        }
 
         [TestMethod]
         public void Call_Parses_Single_Element_From_Json_Repsonse()

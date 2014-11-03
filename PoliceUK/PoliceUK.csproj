@@ -64,6 +64,7 @@
     <Compile Include="Request\Response\IHttpWebResponse.cs" />
     <Compile Include="Request\Response\HttpWebResponseWrapper.cs" />
     <Compile Include="Request\HttpWebRequestFactory.cs" />
+    <Compile Include="Entities\StreetLevelCrimeResults.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

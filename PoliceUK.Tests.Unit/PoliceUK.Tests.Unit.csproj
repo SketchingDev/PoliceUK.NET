@@ -87,6 +87,7 @@
     <EmbeddedResource Include="TestData\Malformed.json" />
     <EmbeddedResource Include="TestData\Empty.json" />
     <EmbeddedResource Include="TestData\Force.json" />
+    <EmbeddedResource Include="TestData\Force.NotFound.txt" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

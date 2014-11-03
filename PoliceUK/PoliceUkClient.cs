@@ -2,44 +2,23 @@
 {
     using Newtonsoft.Json;
     using PoliceUk.Entities;
-    using PoliceUk.Exceptions;
     using PoliceUk.Request;
+    using PoliceUK;
+    using PoliceUK.Entities;
     using PoliceUK.Entities.Force;
     using System;
-    using System.Linq;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Text;
-    using PoliceUK.Entities;
 
     // TODO Make Async
-    public class PoliceUkClient : IPoliceUkClient
+    public class PoliceUkClient : HttpClient, IPoliceUkClient
     {
-        private class ParsedResponse<T>
-        {
-            public HttpStatusCode StatusCode;
-            public T Data;
-        }
-
-        private const string UserAgent = "PoliceUkClient";
-
         private const string ApiPath = "http://data.police.uk/api/";
 
-        /// <summary>
-        /// Gets and sets the Proxy used when requesting data from the API.
-        /// </summary>
-        public IWebProxy Proxy { get; set; }
-
-        /// <summary>
-        /// Gets and sets the factory used to create requests.
-        /// </summary>
-        public IHttpWebRequestFactory RequestFactory { get; set; }
-
-        public PoliceUkClient()
-        {
-            this.RequestFactory = new HttpWebRequestFactory();
-        }
+        public PoliceUkClient(): base(new HttpWebRequestFactory()){}
 
         public StreetLevelCrimeResults StreetLevelCrimes(IGeoposition position, DateTime? date = null)
         {
@@ -54,8 +33,8 @@
 
             if (date.HasValue) url += string.Format("&date={0:yyyy'-'MM}", date.Value);
 
-            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url, this.Proxy);
-            ParsedResponse<Crime[]> response = ProcessRequest<Crime[]>(request);
+            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url);
+            ParsedResponse<Crime[]> response = ProcessJsonRequest<Crime[]>(request);
 
             return new StreetLevelCrimeResults()
             {
@@ -81,8 +60,8 @@
             ASCIIEncoding ascii = new ASCIIEncoding();
             byte[] postBytes = ascii.GetBytes(postData.ToString());
 
-            IHttpWebRequest request = BuildPostWebRequest(this.RequestFactory, url, this.Proxy, postBytes);
-            ParsedResponse<Crime[]> response = ProcessRequest<Crime[]>(request);
+            IHttpWebRequest request = BuildPostWebRequest(this.RequestFactory, url, postBytes);
+            ParsedResponse<Crime[]> response = ProcessJsonRequest<Crime[]>(request);
 
             return new StreetLevelCrimeResults()
             {
@@ -97,8 +76,8 @@
             string url = string.Format("{0}crime-categories?date={1:yyyy'-'MM}", ApiPath,
                 date);
 
-            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url, this.Proxy);
-            ParsedResponse<Category[]> response = ProcessRequest<Category[]>(request);
+            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url);
+            ParsedResponse<Category[]> response = ProcessJsonRequest<Category[]>(request);
 
             return response.Data;
         }
@@ -107,8 +86,8 @@
         {
             string url = string.Format("{0}forces", ApiPath);
 
-            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url, this.Proxy);
-            ParsedResponse<ForceSummary[]> response = ProcessRequest<ForceSummary[]>(request);
+            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url);
+            ParsedResponse<ForceSummary[]> response = ProcessJsonRequest<ForceSummary[]>(request);
 
             return response.Data;
         }
@@ -122,12 +101,12 @@
 
             string url = string.Format("{0}forces/{1}", ApiPath, id);
 
-            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url, this.Proxy);
+            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url);
 
             ParsedResponse<ForceDetails> response = ProcessRequest<ForceDetails>(request, (x) =>
             {
                 // Do not automatically parse response, as if force is not found then non-json response returned
-                return (x.StatusCode == HttpStatusCode.OK) ? ProcessJsonResponse<ForceDetails>(x) : null; 
+                return (x.StatusCode == HttpStatusCode.OK) ? JsonResponseProcessor<ForceDetails>(x) : null; 
             });
 
             return response.Data;
@@ -135,44 +114,15 @@
 
         /// <summary>
         /// Processes the JSON response from a HTTP request.
-        /// This can be used in most cases except for API calls that response with
+        /// This can be used in most cases except for API calls that respond with
         /// a non-json string, such as <see cref="Force(string)"/> which returns 'Not Found'.
         /// </summary>
-        private ParsedResponse<T> ProcessRequest<T>(IHttpWebRequest request) where T : class
+        private ParsedResponse<T> ProcessJsonRequest<T>(IHttpWebRequest request) where T : class
         {
-            return this.ProcessRequest<T>(request, ProcessJsonResponse<T>);
+            return this.ProcessRequest<T>(request, JsonResponseProcessor<T>);
         }
 
-        /// <param name="responseProcessor">Delegate for defining the processor of the response.</param>
-        private ParsedResponse<T> ProcessRequest<T>(IHttpWebRequest request, Func<IHttpWebResponse, T> responseProcessor) where T : class
-        {
-            var response = new ParsedResponse<T>();
-            try
-            {
-                using (IHttpWebResponse httpResponse = request.GetResponse())
-                {
-                    response.StatusCode = httpResponse.StatusCode;
-                    response.Data = responseProcessor(httpResponse);
-                }
-            }
-            catch (WebException ex)
-            {
-                if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null)
-                {
-                    var httpResponse = (HttpWebResponse)ex.Response;
-                    response.StatusCode = httpResponse.StatusCode;
-                }
-                else
-                {
-                    string message = "Failed to request crime data from " + request.RequestUri;
-                    throw new DataRequestException(message, ex);
-                }
-            }
-
-            return response;
-        }
-
-        private static T ProcessJsonResponse<T>(IHttpWebResponse response) where T : class
+        private static T JsonResponseProcessor<T>(IHttpWebResponse response) where T : class
         {
             T data = null;
 
@@ -186,38 +136,11 @@
                 }
                 catch (JsonException ex)
                 {
-                    throw new PoliceUk.Exceptions.InvalidDataException("Failed to deserialise crime data", ex);
+                    throw new PoliceUk.Exceptions.InvalidDataException("Failed to deserialise JSON crime data", ex);
                 }
             }
 
             return data;
-        }
-
-        private static IHttpWebRequest BuildGetWebRequest(IHttpWebRequestFactory factory, string uri, IWebProxy proxy)
-        {
-            IHttpWebRequest request = factory.Create(uri);
-            if (proxy != null) request.Proxy = proxy;
-            request.Method = "GET";
-
-            return request;
-        }
-
-        private static IHttpWebRequest BuildPostWebRequest(IHttpWebRequestFactory factory, string uri, IWebProxy proxy, byte[] postBytes)
-        {
-            IHttpWebRequest request = factory.Create(uri);
-            if (proxy != null) request.Proxy = proxy;
-            request.Method = "POST";
-
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = postBytes.Length;
-
-            using(Stream postStream = request.GetRequestStream())
-            {
-                postStream.Write(postBytes, 0, postBytes.Length);
-                postStream.Flush();
-            }
-
-            return request;
         }
     }
 }

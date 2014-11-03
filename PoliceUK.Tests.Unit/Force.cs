@@ -6,12 +6,20 @@
     using PoliceUK.Entities.Force;
     using PoliceUK.Tests.Unit.CustomAssertions;
     using PoliceUK.Tests.Unit.CustomAssertions.Equality.ForceDetails;
+    using System;
     using System.IO;
     using System.Linq;
 
     [TestClass]
     public class Force : BaseMethodTests
     {
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Call_With_Null_Id_Throws_ArgumentNullException()
+        {
+            (new PoliceUkClient()).Force(null);
+        }
+
         [TestMethod]
         [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
         public void Call_With_Malformed_Response_Throwns_InvalidDataException()

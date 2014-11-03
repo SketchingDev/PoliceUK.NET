@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiClient.cs" />
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\Crime.cs" />
     <Compile Include="Entities\Force\ForceDetails.cs" />

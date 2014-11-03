@@ -3,6 +3,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using PoliceUk;
     using PoliceUk.Entities;
+    using PoliceUK.Entities;
     using PoliceUK.Entities.Force;
     using System;
     using System.Collections.Generic;
@@ -30,12 +31,15 @@
         {
             PoliceUkClient policeApi = new PoliceUkClient();
 
-            IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(new Geoposition(51.513016, -0.10231));
+            StreetLevelCrimeResults result = policeApi.StreetLevelCrimes(new Geoposition(51.513016, -0.10231));
 
-            Assert.IsNotNull(crimes);
-            Assert.AreEqual(true, crimes.Count() > 0);
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.TooManyCrimesOrError);
 
-            Crime crime = crimes.First();
+            Assert.IsNotNull(result.Crimes);
+            Assert.AreEqual(true, result.Crimes.Count() > 0);
+
+            Crime crime = result.Crimes.First();
             Assert.IsNotNull(crime.Id);
         }
 
@@ -51,12 +55,15 @@
                 new Geoposition(50.184263,-5.424070)
             };
 
-            IEnumerable<Crime> crimes = policeApi.StreetLevelCrimes(polygon);
+            StreetLevelCrimeResults result = policeApi.StreetLevelCrimes(polygon);
 
-            Assert.IsNotNull(crimes);
-            Assert.AreEqual(true, crimes.Count() > 0);
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.TooManyCrimesOrError);
 
-            Crime crime = crimes.First();
+            Assert.IsNotNull(result.Crimes);
+            Assert.AreEqual(true, result.Crimes.Count() > 0);
+
+            Crime crime = result.Crimes.First();
             Assert.IsNotNull(crime.Id);
         }
 

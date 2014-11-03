@@ -10,6 +10,8 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Net;
+    using System.Text;
+    using PoliceUK.Entities;
 
     // TODO Make Async
     public class PoliceUkClient : IPoliceUkClient
@@ -19,6 +21,8 @@
             public HttpStatusCode StatusCode;
             public T Data;
         }
+
+        private const string UserAgent = "PoliceUkClient";
 
         private const string ApiPath = "http://data.police.uk/api/";
 
@@ -37,7 +41,7 @@
             this.RequestFactory = new HttpWebRequestFactory();
         }
 
-        public IEnumerable<Crime> StreetLevelCrimes(IGeoposition position, DateTime? date = null)
+        public StreetLevelCrimeResults StreetLevelCrimes(IGeoposition position, DateTime? date = null)
         {
             if (position == null)
             {
@@ -50,38 +54,42 @@
 
             if (date.HasValue) url += string.Format("&date={0:yyyy'-'MM}", date.Value);
 
-            IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
+            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url, this.Proxy);
             ParsedResponse<Crime[]> response = ProcessRequest<Crime[]>(request);
 
-            /* If a custom area contains more than 10,000 crimes, the API will return a 503 status code.
-             * response.StatusCode == HttpStatusCode.ServiceUnavailable
-             */
-
-            return response.Data;
+            return new StreetLevelCrimeResults()
+            {
+                // API returns status code 503 if area contains more than 10,000 crimes, or error has actually occurred.
+                TooManyCrimesOrError = (response.StatusCode == HttpStatusCode.ServiceUnavailable),
+                Crimes = response.Data
+            };
         }
 
-        public IEnumerable<Crime> StreetLevelCrimes(IEnumerable<IGeoposition> polygon, DateTime? date = null)
+        public StreetLevelCrimeResults StreetLevelCrimes(IEnumerable<IGeoposition> polygon, DateTime? date = null)
         {
             if (polygon == null)
             {
                 throw new ArgumentNullException("polygon");
             }
 
-            string url = string.Format("{0}crimes-street/all-crime?", ApiPath);
-                   url += "poly=" + String.Join(":", polygon.Select(T => T.Latitiude.ToString() + "," + T.Longitude.ToString()));
+            string url = string.Format("{0}crimes-street/all-crime", ApiPath);
 
-            if (date.HasValue) url += string.Format("&date={0:yyyy'-'MM}", date.Value);
+            // Post data
+            string postData = "poly=" + String.Join(":", polygon.Select(T => T.Latitiude.ToString() + "," + T.Longitude.ToString()));
+            if (date.HasValue) postData += string.Format("&date={0:yyyy'-'MM}", date.Value);
 
-            IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
-            request.Method = "POST";
+            ASCIIEncoding ascii = new ASCIIEncoding();
+            byte[] postBytes = ascii.GetBytes(postData.ToString());
 
+            IHttpWebRequest request = BuildPostWebRequest(this.RequestFactory, url, this.Proxy, postBytes);
             ParsedResponse<Crime[]> response = ProcessRequest<Crime[]>(request);
 
-            /* If a custom area contains more than 10,000 crimes, the API will return a 503 status code.
-             * response.StatusCode == HttpStatusCode.ServiceUnavailable
-             */
-
-            return response.Data;
+            return new StreetLevelCrimeResults()
+            {
+                // API returns status code 503 if area contains more than 10,000 crimes, or error has actually occurred.
+                TooManyCrimesOrError = (response.StatusCode == HttpStatusCode.ServiceUnavailable),
+                Crimes = response.Data
+            };
         }
 
         public IEnumerable<Category> CrimeCategories(DateTime date)
@@ -89,7 +97,7 @@
             string url = string.Format("{0}crime-categories?date={1:yyyy'-'MM}", ApiPath,
                 date);
 
-            IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
+            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url, this.Proxy);
             ParsedResponse<Category[]> response = ProcessRequest<Category[]>(request);
 
             return response.Data;
@@ -99,13 +107,12 @@
         {
             string url = string.Format("{0}forces", ApiPath);
 
-            IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
+            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url, this.Proxy);
             ParsedResponse<ForceSummary[]> response = ProcessRequest<ForceSummary[]>(request);
 
             return response.Data;
         }
 
-        //TODO Handle not found status code
         public ForceDetails Force(string id)
         {
             if (id == null)
@@ -115,15 +122,29 @@
 
             string url = string.Format("{0}forces/{1}", ApiPath, id);
 
-            IHttpWebRequest request = BuildWebRequest(this.RequestFactory, url, this.Proxy);
-            ParsedResponse<ForceDetails> response = ProcessRequest<ForceDetails>(request);
+            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url, this.Proxy);
 
-            // 404 if not found
+            ParsedResponse<ForceDetails> response = ProcessRequest<ForceDetails>(request, (x) =>
+            {
+                // Do not automatically parse response, as if force is not found then non-json response returned
+                return (x.StatusCode == HttpStatusCode.OK) ? ProcessJsonResponse<ForceDetails>(x) : null; 
+            });
 
             return response.Data;
         }
 
+        /// <summary>
+        /// Processes the JSON response from a HTTP request.
+        /// This can be used in most cases except for API calls that response with
+        /// a non-json string, such as <see cref="Force(string)"/> which returns 'Not Found'.
+        /// </summary>
         private ParsedResponse<T> ProcessRequest<T>(IHttpWebRequest request) where T : class
+        {
+            return this.ProcessRequest<T>(request, ProcessJsonResponse<T>);
+        }
+
+        /// <param name="responseProcessor">Delegate for defining the processor of the response.</param>
+        private ParsedResponse<T> ProcessRequest<T>(IHttpWebRequest request, Func<IHttpWebResponse, T> responseProcessor) where T : class
         {
             var response = new ParsedResponse<T>();
             try
@@ -131,14 +152,14 @@
                 using (IHttpWebResponse httpResponse = request.GetResponse())
                 {
                     response.StatusCode = httpResponse.StatusCode;
-                    response.Data = ProcessWebResponse<T>(httpResponse);
+                    response.Data = responseProcessor(httpResponse);
                 }
             }
             catch (WebException ex)
             {
                 if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null)
                 {
-                    var httpResponse = (HttpWebResponse) ex.Response;
+                    var httpResponse = (HttpWebResponse)ex.Response;
                     response.StatusCode = httpResponse.StatusCode;
                 }
                 else
@@ -151,7 +172,7 @@
             return response;
         }
 
-        private T ProcessWebResponse<T>(IHttpWebResponse response) where T : class
+        private static T ProcessJsonResponse<T>(IHttpWebResponse response) where T : class
         {
             T data = null;
 
@@ -172,11 +193,29 @@
             return data;
         }
 
-        private static IHttpWebRequest BuildWebRequest(IHttpWebRequestFactory factory, string uri, IWebProxy proxy)
+        private static IHttpWebRequest BuildGetWebRequest(IHttpWebRequestFactory factory, string uri, IWebProxy proxy)
         {
             IHttpWebRequest request = factory.Create(uri);
             if (proxy != null) request.Proxy = proxy;
             request.Method = "GET";
+
+            return request;
+        }
+
+        private static IHttpWebRequest BuildPostWebRequest(IHttpWebRequestFactory factory, string uri, IWebProxy proxy, byte[] postBytes)
+        {
+            IHttpWebRequest request = factory.Create(uri);
+            if (proxy != null) request.Proxy = proxy;
+            request.Method = "POST";
+
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = postBytes.Length;
+
+            using(Stream postStream = request.GetRequestStream())
+            {
+                postStream.Write(postBytes, 0, postBytes.Length);
+                postStream.Flush();
+            }
 
             return request;
         }

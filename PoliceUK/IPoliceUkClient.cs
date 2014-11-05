@@ -1,6 +1,6 @@
 ﻿namespace PoliceUk
 {
-    using PoliceUk.Entities;
+    using Entities;
     using PoliceUK.Entities;
     using PoliceUK.Entities.Force;
     using System;
@@ -26,7 +26,7 @@
         /// IMPORTANT NOTE: The street-level crimes returned in the API are only an approximation of where 
         /// the actual crimes occurred, they are NOT the exact locations.
         /// </summary>
-        /// <param name="poly">The lat/lng pairs which define the boundary of the custom area</param>
+        /// <param name="polygon">The lat/lng pairs which define the boundary of the custom area</param>
         /// <param name="date">Optional. (YYYY-MM) Limit results to a specific month.
         /// The latest month will be shown by default.
         /// </param>

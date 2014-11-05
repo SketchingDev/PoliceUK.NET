@@ -1,10 +1,10 @@
 ﻿namespace PoliceUK.Tests.Integrated
 {
+    using Entities;
+    using Entities.Force;
     using NUnit.Framework;
     using PoliceUk;
     using PoliceUk.Entities;
-    using PoliceUK.Entities;
-    using PoliceUK.Entities.Force;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -15,12 +15,12 @@
         [Test]
         public void CrimeCategories_Call_Returns_Results()
         {
-            PoliceUkClient policeApi = new PoliceUkClient();
+            var policeApi = new PoliceUkClient();
 
             IEnumerable<Category> categories = policeApi.CrimeCategories(DateTime.Now);
 
             Assert.IsNotNull(categories);
-            Assert.AreEqual(true, categories.Count() > 0);
+            Assert.AreEqual(true, categories.Any());
 
             Category category = categories.First();
             Assert.IsNotNull(category.Url);
@@ -29,7 +29,7 @@
         [Test]
         public void StreetLevelCrimes_Point_Call_Returns_Results()
         {
-            PoliceUkClient policeApi = new PoliceUkClient();
+            var policeApi = new PoliceUkClient();
 
             StreetLevelCrimeResults result = policeApi.StreetLevelCrimes(new Geoposition(51.513016, -0.10231));
 
@@ -37,7 +37,7 @@
             Assert.IsFalse(result.TooManyCrimesOrError);
 
             Assert.IsNotNull(result.Crimes);
-            Assert.AreEqual(true, result.Crimes.Count() > 0);
+            Assert.AreEqual(true, result.Crimes.Any());
 
             Crime crime = result.Crimes.First();
             Assert.IsNotNull(crime.Id);
@@ -46,9 +46,9 @@
         [Test]
         public void StreetLevelCrimes_Polygon_Call_Returns_Results()
         {
-            PoliceUkClient policeApi = new PoliceUkClient();
+            var policeApi = new PoliceUkClient();
 
-            var polygon = new Geoposition[4] {
+            var polygon = new[] {
                 new Geoposition(50.181460, -5.419521),
                 new Geoposition(50.193935,-5.394716),
                 new Geoposition(50.196353,-5.402184),
@@ -61,7 +61,7 @@
             Assert.IsFalse(result.TooManyCrimesOrError);
 
             Assert.IsNotNull(result.Crimes);
-            Assert.AreEqual(true, result.Crimes.Count() > 0);
+            Assert.AreEqual(true, result.Crimes.Any());
 
             Crime crime = result.Crimes.First();
             Assert.IsNotNull(crime.Id);
@@ -70,12 +70,12 @@
         [Test]
         public void Forces_Call_Returns_Results()
         {
-            PoliceUkClient policeApi = new PoliceUkClient();
+            var policeApi = new PoliceUkClient();
 
             IEnumerable<ForceSummary> forces = policeApi.Forces();
 
             Assert.IsNotNull(forces);
-            Assert.AreEqual(true, forces.Count() > 0);
+            Assert.AreEqual(true, forces.Any());
 
             ForceSummary force = forces.First();
             Assert.IsNotNull(force.Id);
@@ -84,7 +84,7 @@
         [Test]
         public void Force_Call_Returns_Result()
         {
-            PoliceUkClient policeApi = new PoliceUkClient();
+            var policeApi = new PoliceUkClient();
 
             ForceDetails force = policeApi.Force("leicestershire");
 
@@ -95,7 +95,7 @@
         [Test]
         public void Force_Call_With_No_Result_Returns_Null()
         {
-            PoliceUkClient policeApi = new PoliceUkClient();
+            var policeApi = new PoliceUkClient();
 
             ForceDetails force = policeApi.Force("");
 

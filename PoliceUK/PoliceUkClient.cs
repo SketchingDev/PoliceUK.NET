@@ -1,11 +1,12 @@
 ﻿namespace PoliceUk
 {
+    using Entities;
     using Newtonsoft.Json;
-    using PoliceUk.Entities;
-    using PoliceUk.Request;
     using PoliceUK;
     using PoliceUK.Entities;
     using PoliceUK.Entities.Force;
+    using PoliceUK.Request.Response;
+    using Request;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -33,10 +34,10 @@
 
             if (date.HasValue) url += string.Format("&date={0:yyyy'-'MM}", date.Value);
 
-            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url);
+            IHttpWebRequest request = BuildGetWebRequest(url);
             ParsedResponse<Crime[]> response = ProcessJsonRequest<Crime[]>(request);
 
-            return new StreetLevelCrimeResults()
+            return new StreetLevelCrimeResults
             {
                 // API returns status code 503 if area contains more than 10,000 crimes, or error has actually occurred.
                 TooManyCrimesOrError = (response.StatusCode == HttpStatusCode.ServiceUnavailable),
@@ -58,13 +59,13 @@
             string postData = "poly=" + String.Join(":", polygonSections.ToArray());
             if (date.HasValue) postData += string.Format("&date={0:yyyy'-'MM}", date.Value);
 
-            ASCIIEncoding ascii = new ASCIIEncoding();
-            byte[] postBytes = ascii.GetBytes(postData.ToString());
+            var ascii = new ASCIIEncoding();
+            byte[] postBytes = ascii.GetBytes(postData);
 
-            IHttpWebRequest request = BuildPostWebRequest(this.RequestFactory, url, postBytes);
+            IHttpWebRequest request = BuildPostWebRequest(url, postBytes);
             ParsedResponse<Crime[]> response = ProcessJsonRequest<Crime[]>(request);
 
-            return new StreetLevelCrimeResults()
+            return new StreetLevelCrimeResults
             {
                 // API returns status code 503 if area contains more than 10,000 crimes, or error has actually occurred.
                 TooManyCrimesOrError = (response.StatusCode == HttpStatusCode.ServiceUnavailable),
@@ -77,7 +78,7 @@
             string url = string.Format("{0}crime-categories?date={1:yyyy'-'MM}", ApiPath,
                 date);
 
-            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url);
+            IHttpWebRequest request = BuildGetWebRequest(url);
             ParsedResponse<Category[]> response = ProcessJsonRequest<Category[]>(request);
 
             return response.Data;
@@ -87,7 +88,7 @@
         {
             string url = string.Format("{0}forces", ApiPath);
 
-            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url);
+            IHttpWebRequest request = BuildGetWebRequest(url);
             ParsedResponse<ForceSummary[]> response = ProcessJsonRequest<ForceSummary[]>(request);
 
             return response.Data;
@@ -102,9 +103,9 @@
 
             string url = string.Format("{0}forces/{1}", ApiPath, id);
 
-            IHttpWebRequest request = BuildGetWebRequest(this.RequestFactory, url);
+            IHttpWebRequest request = BuildGetWebRequest(url);
 
-            ParsedResponse<ForceDetails> response = ProcessRequest<ForceDetails>(request, (x) =>
+            ParsedResponse<ForceDetails> response = ProcessRequest(request, x =>
             {
                 // Do not automatically parse response, as if force is not found then non-json response returned
                 return (x.StatusCode == HttpStatusCode.OK) ? JsonResponseProcessor<ForceDetails>(x) : null; 
@@ -120,7 +121,7 @@
         /// </summary>
         private ParsedResponse<T> ProcessJsonRequest<T>(IHttpWebRequest request) where T : class
         {
-            return this.ProcessRequest<T>(request, JsonResponseProcessor<T>);
+            return this.ProcessRequest(request, JsonResponseProcessor<T>);
         }
 
         private static T JsonResponseProcessor<T>(IHttpWebResponse response) where T : class
@@ -128,16 +129,16 @@
             T data = null;
 
             using (var streamReader = new StreamReader(response.GetResponseStream()))
-            using (JsonTextReader jsonReader = new JsonTextReader(streamReader))
+            using (var jsonReader = new JsonTextReader(streamReader))
             {
-                Newtonsoft.Json.JsonSerializer serialiser = new JsonSerializer();
+                var serialiser = new JsonSerializer();
                 try
                 {
                     data = serialiser.Deserialize<T>(jsonReader);
                 }
                 catch (JsonException ex)
                 {
-                    throw new PoliceUk.Exceptions.InvalidDataException("Failed to deserialise JSON crime data", ex);
+                    throw new Exceptions.InvalidDataException("Failed to deserialise JSON crime data", ex);
                 }
             }
 

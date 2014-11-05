@@ -1,8 +1,7 @@
 ﻿namespace PoliceUK.Tests.Unit.CustomAssertions.Equality
 {
+    using Entities.Force;
     using NUnit.Framework;
-    using PoliceUK.Entities;
-    using PoliceUK.Entities.Force;
 
     public class ForceSummaryEqualityComparer : AbstractEqualityComparer<ForceSummary>
     {

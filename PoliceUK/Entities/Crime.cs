@@ -1,6 +1,6 @@
 ﻿namespace PoliceUk.Entities
 {
-    using PoliceUk.Entities.Location;
+    using Location;
     using System.Runtime.Serialization;
 
     [DataContract]
@@ -8,7 +8,7 @@
     {
         /// <summary>
         /// Category of the crime.
-        /// <see cref="PoliceUkApi.CrimeCategories"/>
+        /// <see cref="PoliceUkClient.CrimeCategories"/>
         /// </summary>
         [DataMember(Name = "category")]
         public string Category { get; set; }

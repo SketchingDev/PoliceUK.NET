@@ -1,11 +1,11 @@
 ﻿namespace PoliceUK.Tests.Unit
 {
+    using CustomAssertions;
+    using CustomAssertions.Equality;
+    using Entities.Force;
     using NUnit.Framework;
     using PoliceUk;
     using PoliceUk.Tests.Unit;
-    using PoliceUK.Entities.Force;
-    using PoliceUK.Tests.Unit.CustomAssertions;
-    using PoliceUK.Tests.Unit.CustomAssertions.Equality;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -13,7 +13,7 @@
     [TestFixture]
     public class Forces : BaseMethodTests
     {
-        private static readonly ForceSummary TestSummary = new ForceSummary()
+        private static readonly ForceSummary TestSummary = new ForceSummary
                 {
                     Id = "avon-and-somerset",
                     Name = "Avon and Somerset Constabulary"
@@ -25,7 +25,7 @@
         {
             using (Stream stream = GetTestDataFromResource(MalformedTestDataResource))
             {
-                PoliceUkClient policeApi = new PoliceUkClient()
+                var policeApi = new PoliceUkClient
                 {
                     RequestFactory = CreateRequestFactory(stream)
                 };
@@ -39,7 +39,7 @@
         {
             using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
             {
-                IPoliceUkClient policeApi = new PoliceUkClient()
+                var policeApi = new PoliceUkClient
                 {
                     RequestFactory = CreateRequestFactory(stream)
                 };
@@ -57,7 +57,7 @@
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Forces.Single.json"))
             {
-                IPoliceUkClient policeApi = new PoliceUkClient()
+                var policeApi = new PoliceUkClient
                 {
                     RequestFactory = CreateRequestFactory(stream)
                 };
@@ -76,7 +76,7 @@
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Forces.Multiple.json"))
             {
-                IPoliceUkClient policeApi = new PoliceUkClient()
+                var policeApi = new PoliceUkClient
                 {
                     RequestFactory = CreateRequestFactory(stream)
                 };
@@ -90,7 +90,7 @@
                 CustomAssert.AreEqual(TestSummary, force, new ForceSummaryEqualityComparer());
 
                 force = forces.Last();
-                CustomAssert.AreEqual(new ForceSummary()
+                CustomAssert.AreEqual(new ForceSummary
                 {
                     Id = "bedfordshire",
                     Name = "Bedfordshire Police"

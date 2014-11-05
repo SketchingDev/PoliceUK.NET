@@ -1,5 +1,8 @@
 ﻿namespace PoliceUK.Tests.Unit
 {
+    using CustomAssertions;
+    using CustomAssertions.Equality;
+    using Entities;
     using FakeItEasy;
     using NUnit.Framework;
     using PoliceUk;
@@ -7,9 +10,6 @@
     using PoliceUk.Entities.Location;
     using PoliceUk.Request;
     using PoliceUk.Tests.Unit;
-    using PoliceUK.Entities;
-    using PoliceUK.Tests.Unit.CustomAssertions;
-    using PoliceUK.Tests.Unit.CustomAssertions.Equality;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -19,18 +19,18 @@
     {
         public class LatLngOverride
         {
-            private static readonly Crime TestCrime = new Crime()
+            private static readonly Crime TestCrime = new Crime
                 {
                     Category = "burglary",
                     PersistentId = "aebd220e869a235ba92cde43f7e0df29001573b3df1b094bb952820b2b8f44b0",
                     LocationType = "Force",
                     LocationSubtype = "",
                     Id = "20604632",
-                    Location = new CrimeLocation()
+                    Location = new CrimeLocation
                     {
                         Latitude = 52.6271606,
                         Longitude = -1.1485111,
-                        Street = new Street()
+                        Street = new Street
                         {
                             Id = 882208,
                             Name = "On or near Norman Street"
@@ -38,7 +38,7 @@
                     },
                     Context = "Example context",
                     Month = "2013-01",
-                    OutcomeStatus = new OutcomeStatus()
+                    OutcomeStatus = new OutcomeStatus
                     {
                         Category = "Under investigation",
                         Date = "2013-01"
@@ -58,7 +58,7 @@
             {
                 using (Stream stream = GetTestDataFromResource(MalformedTestDataResource))
                 {
-                    PoliceUkClient policeApi = new PoliceUkClient()
+                    var policeApi = new PoliceUkClient
                     {
                         RequestFactory = CreateRequestFactory(stream)
                     };
@@ -72,7 +72,7 @@
             {
                 using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
                 {
-                    PoliceUkClient policeApi = new PoliceUkClient()
+                    var policeApi = new PoliceUkClient
                     {
                         RequestFactory = CreateRequestFactory(stream)
                     };
@@ -93,7 +93,7 @@
             {
                 using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
                 {
-                    PoliceUkClient policeApi = new PoliceUkClient()
+                    var policeApi = new PoliceUkClient
                     {
                         RequestFactory = CreateRequestFactory(stream)
                     };
@@ -114,7 +114,7 @@
             {
                 using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
                 {
-                    IPoliceUkClient policeApi = new PoliceUkClient()
+                    var policeApi = new PoliceUkClient
                     {
                         RequestFactory = CreateRequestFactory(stream)
                     };
@@ -133,7 +133,7 @@
             {
                 using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Single.json"))
                 {
-                    IPoliceUkClient policeApi = new PoliceUkClient()
+                    var policeApi = new PoliceUkClient
                     {
                         RequestFactory = CreateRequestFactory(stream)
                     };
@@ -154,7 +154,7 @@
             {
                 using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Multiple.json"))
                 {
-                    IPoliceUkClient policeApi = new PoliceUkClient()
+                    IPoliceUkClient policeApi = new PoliceUkClient
                     {
                         RequestFactory = CreateRequestFactory(stream)
                     };
@@ -168,18 +168,18 @@
                     Assert.AreEqual(2, result.Crimes.Count());
 
                     Crime crime = result.Crimes.First();
-                    CustomAssert.AreEqual(new Crime()
+                    CustomAssert.AreEqual(new Crime
                     {
                         Category = "anti-social-behaviour",
                         PersistentId = "",
                         LocationType = "Force",
                         LocationSubtype = "",
                         Id = "20599642",
-                        Location = new CrimeLocation()
+                        Location = new CrimeLocation
                         {
                             Latitude = 52.6269479,
                             Longitude = -1.1121716,
-                            Street = new Street()
+                            Street = new Street
                             {
                                 Id = 882380,
                                 Name = "On or near Cedar Road"
@@ -211,7 +211,7 @@
             {
                 using (Stream stream = GetTestDataFromResource(MalformedTestDataResource))
                 {
-                    PoliceUkClient policeApi = new PoliceUkClient()
+                    var policeApi = new PoliceUkClient
                     {
                         RequestFactory = CreateRequestFactory(stream)
                     };
@@ -225,7 +225,7 @@
             {
                 using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
                 {
-                    PoliceUkClient policeApi = new PoliceUkClient()
+                    var policeApi = new PoliceUkClient
                     {
                         RequestFactory = CreateRequestFactory(stream)
                     };
@@ -246,12 +246,12 @@
             {
                 using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
                 {
-                    PoliceUkClient policeApi = new PoliceUkClient()
+                    var policeApi = new PoliceUkClient
                     {
                         RequestFactory = CreateRequestFactory(stream)
                     };
 
-                    var geoPositions = new Geoposition[] {
+                    var geoPositions = new[] {
                         new Geoposition(123, 456),
                         new Geoposition(789, 012)
                     };

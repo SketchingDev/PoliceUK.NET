@@ -1,6 +1,6 @@
 ﻿namespace PoliceUK.Tests.Unit
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using PoliceUk;
     using PoliceUk.Tests.Unit;
     using PoliceUK.Entities.Force;
@@ -10,17 +10,17 @@
     using System.IO;
     using System.Linq;
 
-    [TestClass]
+    [TestFixture]
     public class Force : BaseMethodTests
     {
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Call_With_Null_Id_Throws_ArgumentNullException()
         {
             (new PoliceUkClient()).Force(null);
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
         public void Call_With_Malformed_Response_Throwns_InvalidDataException()
         {
@@ -35,7 +35,7 @@
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Call_Parses_No_Element_From_Json_Repsonse()
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Force.NotFound.txt"))
@@ -52,7 +52,7 @@
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Call_Parses_Single_Element_From_Json_Repsonse()
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Force.json"))

@@ -1,7 +1,7 @@
 ﻿namespace PoliceUk.Tests.Unit
 {
     using FakeItEasy;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using PoliceUk.Request;
     using System.IO;
     using System.Net;

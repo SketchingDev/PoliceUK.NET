@@ -1,7 +1,7 @@
 ﻿namespace PoliceUK.Tests.Unit
 {
     using FakeItEasy;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using PoliceUk;
     using PoliceUk.Entities;
     using PoliceUk.Request;
@@ -13,7 +13,7 @@
     using System.IO;
     using System.Linq;
 
-    [TestClass]
+    [TestFixture]
     public class CrimeCategories : BaseMethodTests
     {
         private static readonly Category TestCategory = 
@@ -23,7 +23,7 @@
                     Name = "Burglary"
                 };
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
         public void Call_With_Malformed_Response_Throwns_InvalidDataException()
         {
@@ -38,7 +38,7 @@
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Call_Contains_Date_In_Request()
         {
             using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
@@ -59,7 +59,7 @@
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Call_Parses_No_Elements_From_Json_Repsonse()
         {
             using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
@@ -77,7 +77,7 @@
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Call_Parses_Single_Element_From_Json_Repsonse()
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.CrimeCatagories.Single.json"))
@@ -96,7 +96,7 @@
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Call_Parses_Multiple_Elements_From_Json_Repsonse()
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.CrimeCatagories.Multiple.json"))

@@ -1,6 +1,6 @@
 ﻿namespace PoliceUK.Tests.Unit.CustomAssertions.Equality.Location
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using PoliceUk.Entities.Location;
 
     public class StreetEqualityComparer : AbstractEqualityComparer<Street>

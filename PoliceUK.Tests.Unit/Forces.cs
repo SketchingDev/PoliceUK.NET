@@ -1,6 +1,6 @@
 ﻿namespace PoliceUK.Tests.Unit
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using PoliceUk;
     using PoliceUk.Tests.Unit;
     using PoliceUK.Entities.Force;
@@ -10,7 +10,7 @@
     using System.IO;
     using System.Linq;
 
-    [TestClass]
+    [TestFixture]
     public class Forces : BaseMethodTests
     {
         private static readonly ForceSummary TestSummary = new ForceSummary()
@@ -19,7 +19,7 @@
                     Name = "Avon and Somerset Constabulary"
                 };
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
         public void Call_With_Malformed_Response_Throwns_InvalidDataException()
         {
@@ -34,7 +34,7 @@
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Call_Parses_No_Elements_From_Json_Repsonse()
         {
             using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
@@ -52,7 +52,7 @@
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Call_Parses_Single_Element_From_Json_Repsonse()
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Forces.Single.json"))
@@ -71,7 +71,7 @@
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Call_Parses_Multiple_Elements_From_Json_Repsonse()
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Forces.Multiple.json"))

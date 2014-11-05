@@ -1,7 +1,7 @@
 ﻿namespace PoliceUK.Tests.Unit
 {
     using FakeItEasy;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using PoliceUk;
     using PoliceUk.Entities;
     using PoliceUk.Entities.Location;
@@ -45,14 +45,14 @@
                     }
                 };
 
-            [TestMethod]
+            [Test]
             [ExpectedException(typeof(ArgumentNullException))]
             public void Call_With_Null_Position_Throws_ArgumentNullException()
             {
                 (new PoliceUkClient()).StreetLevelCrimes((IGeoposition)null);
             }
 
-            [TestMethod]
+            [Test]
             [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
             public void Call_With_Malformed_Response_Throwns_InvalidDataException()
             {
@@ -67,7 +67,7 @@
                 }
             }
 
-            [TestMethod]
+            [Test]
             public void Call_Contains_Date_In_Request()
             {
                 using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
@@ -88,7 +88,7 @@
                 }
             }
 
-            [TestMethod]
+            [Test]
             public void Call_Contains_LatLng_In_Request()
             {
                 using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
@@ -109,7 +109,7 @@
                 }
             }
 
-            [TestMethod]
+            [Test]
             public void Call_Parses_No_Elements_From_Json_Repsonse()
             {
                 using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
@@ -128,7 +128,7 @@
                 }
             }
 
-            [TestMethod]
+            [Test]
             public void Call_Parses_Single_Element_From_Json_Repsonse()
             {
                 using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Single.json"))
@@ -149,7 +149,7 @@
                 }
             }
 
-            [TestMethod]
+            [Test]
             public void Call_Parses_Multiple_Elements_From_Json_Repsonse()
             {
                 using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Multiple.json"))
@@ -198,14 +198,14 @@
 
         public class PolygonOverride
         {
-            [TestMethod]
+            [Test]
             [ExpectedException(typeof(ArgumentNullException))]
             public void Call_With_Null_Position_Throws_ArgumentNullException()
             {
                 (new PoliceUkClient()).StreetLevelCrimes((IEnumerable<IGeoposition>)null);
             }
 
-            [TestMethod]
+            [Test]
             [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
             public void Call_With_Malformed_Response_Throwns_InvalidDataException()
             {
@@ -220,7 +220,7 @@
                 }
             }
 
-            [TestMethod]
+            [Test]
             public void Call_Contains_Date_In_Request()
             {
                 using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
@@ -241,7 +241,7 @@
                 }
             }
 
-            [TestMethod]
+            [Test]
             public void Call_Contains_LatLng_In_Request()
             {
                 using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))

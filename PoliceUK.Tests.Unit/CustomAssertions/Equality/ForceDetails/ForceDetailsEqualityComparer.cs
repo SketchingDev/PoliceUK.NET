@@ -1,6 +1,6 @@
 ﻿namespace PoliceUK.Tests.Unit.CustomAssertions.Equality.ForceDetails
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using PoliceUK.Entities.Force;
     using System.Collections.Generic;
 

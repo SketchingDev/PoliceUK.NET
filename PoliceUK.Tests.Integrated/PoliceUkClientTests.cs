@@ -1,6 +1,6 @@
 ﻿namespace PoliceUK.Tests.Integrated
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using PoliceUk;
     using PoliceUk.Entities;
     using PoliceUK.Entities;
@@ -9,10 +9,10 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    [TestClass]
+    [TestFixture]
     public class PoliceUkClientTests
     {
-        [TestMethod]
+        [Test]
         public void CrimeCategories_Call_Returns_Results()
         {
             PoliceUkClient policeApi = new PoliceUkClient();
@@ -26,7 +26,7 @@
             Assert.IsNotNull(category.Url);
         }
 
-        [TestMethod]
+        [Test]
         public void StreetLevelCrimes_Point_Call_Returns_Results()
         {
             PoliceUkClient policeApi = new PoliceUkClient();
@@ -43,7 +43,7 @@
             Assert.IsNotNull(crime.Id);
         }
 
-        [TestMethod]
+        [Test]
         public void StreetLevelCrimes_Polygon_Call_Returns_Results()
         {
             PoliceUkClient policeApi = new PoliceUkClient();
@@ -67,7 +67,7 @@
             Assert.IsNotNull(crime.Id);
         }
 
-        [TestMethod]
+        [Test]
         public void Forces_Call_Returns_Results()
         {
             PoliceUkClient policeApi = new PoliceUkClient();
@@ -81,7 +81,7 @@
             Assert.IsNotNull(force.Id);
         }
 
-        [TestMethod]
+        [Test]
         public void Force_Call_Returns_Result()
         {
             PoliceUkClient policeApi = new PoliceUkClient();
@@ -92,7 +92,7 @@
             Assert.IsNotNull(force.Id);
         }
 
-        [TestMethod]
+        [Test]
         public void Force_Call_With_No_Result_Returns_Null()
         {
             PoliceUkClient policeApi = new PoliceUkClient();

@@ -1,6 +1,6 @@
 ﻿namespace PoliceUK.Tests.Unit.CustomAssertions
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
 
@@ -29,7 +29,7 @@
             var areEqual = equalityComparer.Equals(expected, actual);
             if (areEqual) return;
 
-            throw new AssertFailedException(string.Format(AreEqualFailureMessage, expected, actual));
+            throw new AssertionException(string.Format(AreEqualFailureMessage, expected, actual));
         }
     }
 }

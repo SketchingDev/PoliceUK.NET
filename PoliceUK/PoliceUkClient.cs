@@ -54,7 +54,8 @@
             string url = string.Format("{0}crimes-street/all-crime", ApiPath);
 
             // Post data
-            string postData = "poly=" + String.Join(":", polygon.Select(T => T.Latitiude.ToString() + "," + T.Longitude.ToString()));
+            IEnumerable<string> polygonSections = polygon.Select(T => T.Latitiude.ToString() + "," + T.Longitude.ToString());
+            string postData = "poly=" + String.Join(":", polygonSections.ToArray());
             if (date.HasValue) postData += string.Format("&date={0:yyyy'-'MM}", date.Value);
 
             ASCIIEncoding ascii = new ASCIIEncoding();

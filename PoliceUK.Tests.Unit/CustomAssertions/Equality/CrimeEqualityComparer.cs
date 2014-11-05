@@ -1,9 +1,9 @@
 ﻿namespace PoliceUK.Tests.Unit.CustomAssertions.Equality
 {
+    using Location;
     using NUnit.Framework;
     using PoliceUk.Entities;
     using PoliceUk.Entities.Location;
-    using PoliceUK.Tests.Unit.CustomAssertions.Equality.Location;
     using System.Collections.Generic;
 
     public class CrimeEqualityComparer : AbstractEqualityComparer<Crime>

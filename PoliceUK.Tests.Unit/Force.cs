@@ -1,11 +1,11 @@
 ﻿namespace PoliceUK.Tests.Unit
 {
+    using CustomAssertions;
+    using CustomAssertions.Equality.ForceDetails;
+    using Entities.Force;
     using NUnit.Framework;
     using PoliceUk;
     using PoliceUk.Tests.Unit;
-    using PoliceUK.Entities.Force;
-    using PoliceUK.Tests.Unit.CustomAssertions;
-    using PoliceUK.Tests.Unit.CustomAssertions.Equality.ForceDetails;
     using System;
     using System.IO;
     using System.Linq;
@@ -26,7 +26,7 @@
         {
             using (Stream stream = GetTestDataFromResource(MalformedTestDataResource))
             {
-                PoliceUkClient policeApi = new PoliceUkClient()
+                var policeApi = new PoliceUkClient
                 {
                     RequestFactory = CreateRequestFactory(stream)
                 };
@@ -40,7 +40,7 @@
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Force.NotFound.txt"))
             {
-                IPoliceUkClient policeApi = new PoliceUkClient()
+                var policeApi = new PoliceUkClient
                 {
                     RequestFactory = CreateRequestFactory(stream, System.Net.HttpStatusCode.NotFound)
                 };
@@ -57,7 +57,7 @@
         {
             using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Force.json"))
             {
-                IPoliceUkClient policeApi = new PoliceUkClient()
+                var policeApi = new PoliceUkClient
                 {
                     RequestFactory = CreateRequestFactory(stream)
                 };

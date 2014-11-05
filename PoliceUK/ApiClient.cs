@@ -5,6 +5,7 @@
     using System;
     using System.IO;
     using System.Net;
+    using Request.Response;
 
     public class HttpClient
     {
@@ -58,18 +59,18 @@
             return response;
         }
 
-        protected IHttpWebRequest BuildGetWebRequest(IHttpWebRequestFactory factory, string uri)
+        protected IHttpWebRequest BuildGetWebRequest(string uri)
         {
-            IHttpWebRequest request = factory.Create(uri);
+            IHttpWebRequest request = this.RequestFactory.Create(uri);
             if (this.Proxy != null) request.Proxy = this.Proxy;
             request.Method = "GET";
 
             return request;
         }
 
-        protected IHttpWebRequest BuildPostWebRequest(IHttpWebRequestFactory factory, string uri, byte[] postBytes)
+        protected IHttpWebRequest BuildPostWebRequest(string uri, byte[] postBytes)
         {
-            IHttpWebRequest request = factory.Create(uri);
+            IHttpWebRequest request = this.RequestFactory.Create(uri);
             if (this.Proxy != null) request.Proxy = this.Proxy;
             request.Method = "POST";
 

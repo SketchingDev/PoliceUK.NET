@@ -16,7 +16,7 @@
         /// <param name="actual">The second generic type data to compare. This is the generic type data the unit test produced.</param>
         /// <param name="equalityComparer">The EqualityComparer used to determine 
         /// if <paramref name="expected"/> and <paramref name="actual"/> are equal.</param>
-        /// <exception cref="Microsoft.VisualStudio.TestTools.UnitTesting.AssertFailedException">
+        /// <exception cref="NUnit.Framework.AssertionException">
         /// <paramref name="expected"/> is not equal to <paramref name="actual"/>.
         /// </exception>
         public static void AreEqual<T>(T expected, T actual, IEqualityComparer<T> equalityComparer)

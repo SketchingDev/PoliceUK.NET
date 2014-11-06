@@ -13,3 +13,4 @@ before_install:
 script:
  - xbuild 
  - nunit-console ./PoliceUK.Tests.Unit/bin/Debug/PoliceUK.Tests.Unit.dll -exclude Integration,NotWorkingOnMono
+ - nunit-console ./PoliceUK.Tests.Integrated/bin/Debug/PoliceUK.Tests.Integrated.dll -exclude Integration,NotWorkingOnMono

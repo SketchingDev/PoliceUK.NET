@@ -1,5 +1,6 @@
 ﻿namespace PoliceUK.Tests.Unit
 {
+    using System.Text;
     using CustomAssertions;
     using CustomAssertions.Equality;
     using Entities;
@@ -217,54 +218,6 @@
                     };
 
                     policeApi.StreetLevelCrimes(A.Fake<IEnumerable<IGeoposition>>(), DateTime.Now);
-                }
-            }
-
-            [Test]
-            public void Call_Contains_Date_In_Request()
-            {
-                using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
-                {
-                    var policeApi = new PoliceUkClient
-                    {
-                        RequestFactory = CreateRequestFactory(stream)
-                    };
-
-                    DateTime nowDateTime = DateTime.Now;
-                    string formattedDateTime = nowDateTime.ToString("yyyy'-'MM");
-
-                    policeApi.StreetLevelCrimes(A.Fake<IEnumerable<IGeoposition>>(), nowDateTime);
-
-                    // Assert
-                    IHttpWebRequestFactory factory = policeApi.RequestFactory;
-                    A.CallTo(() => factory.Create(A<string>.That.Contains(formattedDateTime))).MustHaveHappened();
-                }
-            }
-
-            [Test]
-            public void Call_Contains_LatLng_In_Request()
-            {
-                using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
-                {
-                    var policeApi = new PoliceUkClient
-                    {
-                        RequestFactory = CreateRequestFactory(stream)
-                    };
-
-                    var geoPositions = new[] {
-                        new Geoposition(123, 456),
-                        new Geoposition(789, 012)
-                    };
-
-                    policeApi.StreetLevelCrimes(geoPositions);
-
-                    // Assert
-                    IHttpWebRequestFactory factory = policeApi.RequestFactory;
-                    A.CallTo(() => factory.Create(A<string>.That.Contains(geoPositions[0].Latitiude.ToString()))).MustHaveHappened();
-                    A.CallTo(() => factory.Create(A<string>.That.Contains(geoPositions[0].Longitude.ToString()))).MustHaveHappened();
-
-                    A.CallTo(() => factory.Create(A<string>.That.Contains(geoPositions[1].Latitiude.ToString()))).MustHaveHappened();
-                    A.CallTo(() => factory.Create(A<string>.That.Contains(geoPositions[1].Longitude.ToString()))).MustHaveHappened();
                 }
             }
         }

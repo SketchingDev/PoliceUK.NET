@@ -14,7 +14,7 @@
 
         protected const string MalformedTestDataResource = "PoliceUK.Tests.Unit.TestData.Malformed.json";
 
-        protected static IHttpWebRequestFactory CreateRequestFactory(Stream streamResponse, HttpStatusCode statusCode = HttpStatusCode.OK)
+        protected static IHttpWebRequest CreateRequest(Stream streamResponse, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             var response = A.Fake<IHttpWebResponse>();
             A.CallTo(() => response.GetResponseStream()).Returns(streamResponse);
@@ -22,6 +22,13 @@
 
             var request = A.Fake<IHttpWebRequest>();
             A.CallTo(() => request.GetResponse()).Returns(response);
+
+            return request;
+        }
+
+        protected static IHttpWebRequestFactory CreateRequestFactory(Stream streamResponse, HttpStatusCode statusCode = HttpStatusCode.OK)
+        {
+            IHttpWebRequest request = CreateRequest(streamResponse, statusCode);
 
             var requestFactory = A.Fake<IHttpWebRequestFactory>();
             A.CallTo(() => requestFactory.Create(A<string>.Ignored)).Returns(request);

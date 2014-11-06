@@ -51,6 +51,8 @@
                 DateTime nowDateTime = DateTime.Now;
                 string formattedDateTime = nowDateTime.ToString("yyyy'-'MM");
 
+                policeApi.CrimeCategories(nowDateTime);
+
                 // Assert
                 IHttpWebRequestFactory factory = policeApi.RequestFactory;
                 A.CallTo(() => factory.Create(A<string>.That.Contains(formattedDateTime))).MustHaveHappened();

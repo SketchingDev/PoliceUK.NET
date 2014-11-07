@@ -19,11 +19,9 @@
 
             IEnumerable<Category> categories = policeApi.CrimeCategories(DateTime.Now);
 
-            Assert.IsNotNull(categories);
-            Assert.AreEqual(true, categories.Any());
-
-            Category category = categories.First();
-            Assert.IsNotNull(category.Url);
+            // Assert
+            Assert.That(categories, Is.Not.Null.And.Not.Empty);
+            Assert.IsNotNull(categories.First().Url);
         }
 
         [Test]
@@ -33,11 +31,11 @@
 
             StreetLevelCrimeResults result = policeApi.StreetLevelCrimes(new Geoposition(51.513016, -0.10231));
 
+            // Assert
             Assert.IsNotNull(result);
-            Assert.IsFalse(result.TooManyCrimesOrError);
 
-            Assert.IsNotNull(result.Crimes);
-            Assert.AreEqual(true, result.Crimes.Any());
+            Assert.IsFalse(result.TooManyCrimesOrError);
+            Assert.That(result.Crimes, Is.Not.Null.And.Not.Empty);
 
             Crime crime = result.Crimes.First();
             Assert.IsNotNull(crime.Id);
@@ -57,11 +55,11 @@
 
             StreetLevelCrimeResults result = policeApi.StreetLevelCrimes(polygon);
 
+            // Assert
             Assert.IsNotNull(result);
             Assert.IsFalse(result.TooManyCrimesOrError);
 
-            Assert.IsNotNull(result.Crimes);
-            Assert.AreEqual(true, result.Crimes.Any());
+            Assert.That(result.Crimes, Is.Not.Null.And.Not.Empty);
 
             Crime crime = result.Crimes.First();
             Assert.IsNotNull(crime.Id);
@@ -74,8 +72,8 @@
 
             IEnumerable<ForceSummary> forces = policeApi.Forces();
 
-            Assert.IsNotNull(forces);
-            Assert.AreEqual(true, forces.Any());
+            // Assert
+            Assert.That(forces, Is.Not.Null.And.Not.Empty);
 
             ForceSummary force = forces.First();
             Assert.IsNotNull(force.Id);
@@ -88,6 +86,7 @@
 
             ForceDetails force = policeApi.Force("leicestershire");
 
+            // Assert
             Assert.IsNotNull(force);
             Assert.IsNotNull(force.Id);
         }
@@ -99,6 +98,7 @@
 
             ForceDetails force = policeApi.Force("");
 
+            // Assert
             Assert.IsNull(force);
         }
     }

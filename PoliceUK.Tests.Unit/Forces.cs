@@ -7,17 +7,61 @@
     using PoliceUk;
     using PoliceUk.Tests.Unit;
     using System.Collections.Generic;
-    using System.Linq;
     using System.IO;
+    using System.Linq;
 
     [TestFixture]
     public class Forces : BaseMethodTests
     {
-        private static readonly ForceSummary TestSummary = new ForceSummary
+        #region Dummy data
+
+        private static readonly ForceSummary ForceSummaryOne = new ForceSummary
+            {
+                Id = "avon-and-somerset",
+                Name = "Avon and Somerset Constabulary"
+            };
+
+        private static readonly ForceSummary ForceSummaryTwo = new ForceSummary
+            {
+                Id = "bedfordshire",
+                Name = "Bedfordshire Police"
+            };
+
+        #endregion
+
+        private static readonly object[] NoForceSummary = 
+            {
+                new object[]
                 {
-                    Id = "avon-and-somerset",
-                    Name = "Avon and Somerset Constabulary"
-                };
+                    EmptyArrayTestDataResource, 
+                    new ForceSummary[]{}
+                }
+            };
+
+        private static readonly object[] DummyForceSummary = 
+            {
+                new object[]
+                {
+                    "PoliceUK.Tests.Unit.TestData.Forces.Single.json", 
+                    new ForceSummary[]
+                    {
+                        ForceSummaryOne
+                    }
+                }
+            };
+
+        private static readonly object[] DummyForceSummeries = 
+            {
+                new object[]
+                {
+                    "PoliceUK.Tests.Unit.TestData.Forces.Multiple.json", 
+                    new ForceSummary[]
+                    {
+                        ForceSummaryOne, 
+                        ForceSummaryTwo
+                    }
+                }
+            };
 
         [Test]
         [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
@@ -34,28 +78,10 @@
             }
         }
 
-        [Test]
-        public void Call_Parses_No_Elements_From_Json_Repsonse()
+        [Test, TestCaseSource("NoForceSummary"), TestCaseSource("DummyForceSummary"), TestCaseSource("DummyForceSummeries")]
+        public void Call_Parses_Elements_From_Json_Repsonse(string jsonResourceName, ForceSummary[] expectedForceSummaries)
         {
-            using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
-            {
-                var policeApi = new PoliceUkClient
-                {
-                    RequestFactory = CreateRequestFactory(stream)
-                };
-
-                IEnumerable<ForceSummary> forces = policeApi.Forces();
-
-                // Assert
-                Assert.IsNotNull(forces);
-                Assert.AreEqual(0, forces.Count());
-            }
-        }
-
-        [Test]
-        public void Call_Parses_Single_Element_From_Json_Repsonse()
-        {
-            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Forces.Single.json"))
+            using (Stream stream = GetTestDataFromResource(jsonResourceName))
             {
                 var policeApi = new PoliceUkClient
                 {
@@ -64,37 +90,16 @@
                 IEnumerable<ForceSummary> forces = policeApi.Forces();
 
                 // Assert
-                Assert.IsNotNull(forces);
+                Assert.That(forces, Is.Not.Null.And.Length.EqualTo(expectedForceSummaries.Length));
 
-                ForceSummary force = forces.First();
-                CustomAssert.AreEqual(TestSummary, force, new ForceSummaryEqualityComparer());
-            }
-        }
-
-        [Test]
-        public void Call_Parses_Multiple_Elements_From_Json_Repsonse()
-        {
-            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Forces.Multiple.json"))
-            {
-                var policeApi = new PoliceUkClient
+                int total = forces.Count();
+                for (int i = 0; i < total; i++)
                 {
-                    RequestFactory = CreateRequestFactory(stream)
-                };
-                IEnumerable<ForceSummary> forces = policeApi.Forces();
+                    ForceSummary expected = expectedForceSummaries[i];
+                    ForceSummary actual = forces.ElementAtOrDefault(i);
 
-                // Assert
-                Assert.IsNotNull(forces);
-                Assert.AreEqual(2, forces.Count());
-
-                ForceSummary force = forces.First();
-                CustomAssert.AreEqual(TestSummary, force, new ForceSummaryEqualityComparer());
-
-                force = forces.Last();
-                CustomAssert.AreEqual(new ForceSummary
-                {
-                    Id = "bedfordshire",
-                    Name = "Bedfordshire Police"
-                }, force, new ForceSummaryEqualityComparer());
+                    CustomAssert.AreEqual(expected, actual, new ForceSummaryEqualityComparer());
+                }
             }
         }
     }

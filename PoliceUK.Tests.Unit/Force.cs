@@ -7,12 +7,52 @@
     using PoliceUk;
     using PoliceUk.Tests.Unit;
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
 
     [TestFixture]
     public class Force : BaseMethodTests
     {
+        #region Dummy data
+
+        private static readonly ForceDetails DummyForceDetails = new ForceDetails()
+            {
+                Id = "leicestershire",
+                Name = "Leicestershire Police",
+                Telephone = "101",
+                Url = "http://www.leics.police.uk/",
+                Description = "This is an example description",
+                EngagementMethods = new ForceEngagementMethod[]
+                {
+                    new ForceEngagementMethod
+                    {
+                        Url = "http://www.facebook.com/leicspolice",
+                        Type = "facebook",
+                        Description = "This is another example description",
+                        Title = "facebook"
+                    },
+                    new ForceEngagementMethod
+                    {
+                        Url = "",
+                        Type = "telephone",
+                        Description = "This is yet another example description",
+                        Title = "telephone"
+                    }
+                }
+            };
+
+        #endregion
+
+        private static readonly object[] DummyForce = 
+            {
+                new object[]
+                {
+                    "PoliceUK.Tests.Unit.TestData.Force.json", 
+                    DummyForceDetails
+                }
+            };
+
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Call_With_Null_Id_Throws_ArgumentNullException()
@@ -52,10 +92,10 @@
             }
         }
 
-        [Test]
-        public void Call_Parses_Single_Element_From_Json_Repsonse()
+        [Test, TestCaseSource("DummyForce")]
+        public void Call_Parses_Element_From_Json_Repsonse(string jsonResourceName, ForceDetails expectedForceDetails)
         {
-            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Force.json"))
+            using (Stream stream = GetTestDataFromResource(jsonResourceName))
             {
                 var policeApi = new PoliceUkClient
                 {
@@ -66,37 +106,21 @@
                 // Assert
                 Assert.IsNotNull(force);
 
-                CustomAssert.AreEqual(new ForceDetails()
+                CustomAssert.AreEqual(DummyForceDetails, force, new ForceDetailsEqualityComparer());
+
+                IEnumerable<ForceEngagementMethod> actualEngagementMethods   = force.EngagementMethods;
+                ForceEngagementMethod[] expectedEngagementMethods = expectedForceDetails.EngagementMethods.ToArray();
+
+                Assert.That(actualEngagementMethods, Is.Not.Null.And.Count.EqualTo(expectedEngagementMethods.Length));
+
+                int total = actualEngagementMethods.Count();
+                for (int i = 0; i < total; i++)
                 {
-                    Id = "leicestershire",
-                    Name = "Leicestershire Police",
-                    Telephone = "101",
-                    Url = "http://www.leics.police.uk/",
-                    Description = "This is an example description"
-                }, force, new ForceDetailsEqualityComparer());
+                    ForceEngagementMethod expected = expectedEngagementMethods[i];
+                    ForceEngagementMethod actual   = actualEngagementMethods.ElementAtOrDefault(i);
 
-
-                ForceEngagementMethod engagementMethod = force.EngagementMethods.First();
-                Assert.IsNotNull(engagementMethod);
-
-                CustomAssert.AreEqual(new ForceEngagementMethod()
-                {
-                    Url = "http://www.facebook.com/leicspolice",
-                    Type = "facebook",
-                    Description = "This is another example description",
-                    Title = "facebook"
-                }, engagementMethod, new ForceEngagementMethodEqualityComparer());
-
-                engagementMethod = force.EngagementMethods.Last();
-                Assert.IsNotNull(engagementMethod);
-
-                CustomAssert.AreEqual(new ForceEngagementMethod()
-                {
-                    Url = "",
-                    Type = "telephone",
-                    Description = "This is yet another example description",
-                    Title = "telephone"
-                }, engagementMethod, new ForceEngagementMethodEqualityComparer());
+                    CustomAssert.AreEqual(expected, actual, new ForceEngagementMethodEqualityComparer());
+                }
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿namespace PoliceUK.Tests.Unit
 {
-    using System.Text;
     using CustomAssertions;
     using CustomAssertions.Equality;
     using Entities;
@@ -15,36 +14,98 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using InvalidDataException = PoliceUk.Exceptions.InvalidDataException;
 
     public class StreetLevelCrimes : BaseMethodTests
     {
+        #region Dummy data
+
+        private static readonly Crime DummyStreetLevelCrimeOne = new Crime
+        {
+            Category = "anti-social-behaviour",
+            PersistentId = "",
+            LocationType = "Force",
+            LocationSubtype = "",
+            Id = "20599642",
+            Location = new CrimeLocation
+            {
+                Latitude = 52.6269479,
+                Longitude = -1.1121716,
+                Street = new Street
+                {
+                    Id = 882380,
+                    Name = "On or near Cedar Road"
+                }
+            },
+            Context = "",
+            Month = "2013-01",
+            OutcomeStatus = null
+        };
+
+        private static readonly Crime DummyStreetLevelCrimeTwo = new Crime
+        {
+            Category = "burglary",
+            PersistentId = "aebd220e869a235ba92cde43f7e0df29001573b3df1b094bb952820b2b8f44b0",
+            LocationType = "Force",
+            LocationSubtype = "",
+            Id = "20604632",
+            Location = new CrimeLocation
+            {
+                Latitude = 52.6271606,
+                Longitude = -1.1485111,
+                Street = new Street
+                {
+                    Id = 882208,
+                    Name = "On or near Norman Street"
+                }
+            },
+            Context = "Example context",
+            Month = "2013-01",
+            OutcomeStatus = new OutcomeStatus
+            {
+                Category = "Under investigation",
+                Date = "2013-01"
+            }
+        };
+
+        #endregion
+
+        [TestFixture]
         public class LatLngOverride
         {
-            private static readonly Crime TestCrime = new Crime
+            private static readonly object[] NoStreetLevelCrime = 
+            {
+                new object[]
                 {
-                    Category = "burglary",
-                    PersistentId = "aebd220e869a235ba92cde43f7e0df29001573b3df1b094bb952820b2b8f44b0",
-                    LocationType = "Force",
-                    LocationSubtype = "",
-                    Id = "20604632",
-                    Location = new CrimeLocation
+                    EmptyArrayTestDataResource, 
+                    new Crime[]{}
+                }
+            };
+
+            private static readonly object[] DummyStreetLevelCrime = 
+            {
+                new object[]
+                {
+                    "PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Single.json", 
+                    new Crime[]
                     {
-                        Latitude = 52.6271606,
-                        Longitude = -1.1485111,
-                        Street = new Street
-                        {
-                            Id = 882208,
-                            Name = "On or near Norman Street"
-                        }
-                    },
-                    Context = "Example context",
-                    Month = "2013-01",
-                    OutcomeStatus = new OutcomeStatus
-                    {
-                        Category = "Under investigation",
-                        Date = "2013-01"
+                        DummyStreetLevelCrimeOne
                     }
-                };
+                }
+            };
+
+            private static readonly object[] DummyStreetLevelCrimes = 
+            {
+                new object[]
+                {
+                    "PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Multiple.json", 
+                    new Crime[]
+                    {
+                        DummyStreetLevelCrimeOne, 
+                        DummyStreetLevelCrimeTwo
+                    }
+                }
+            };
 
             [Test]
             [ExpectedException(typeof(ArgumentNullException))]
@@ -54,7 +115,7 @@
             }
 
             [Test]
-            [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
+            [ExpectedException(typeof(InvalidDataException))]
             public void Call_With_Malformed_Response_Throwns_InvalidDataException()
             {
                 using (Stream stream = GetTestDataFromResource(MalformedTestDataResource))
@@ -110,50 +171,10 @@
                 }
             }
 
-            [Test]
-            public void Call_Parses_No_Elements_From_Json_Repsonse()
+            [Test, TestCaseSource("NoStreetLevelCrime"), TestCaseSource("DummyStreetLevelCrime"), TestCaseSource("DummyStreetLevelCrimes")]
+            public void Call_Parses_Elements_From_Json_Repsonse(string jsonResourceName, Crime[] expectedCrimes)
             {
-                using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
-                {
-                    var policeApi = new PoliceUkClient
-                    {
-                        RequestFactory = CreateRequestFactory(stream)
-                    };
-
-                    StreetLevelCrimeResults result = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>());
-
-                    // Assert
-                    Assert.IsNotNull(result);
-                    Assert.IsNotNull(result.Crimes);
-                    Assert.AreEqual(0, result.Crimes.Count());
-                }
-            }
-
-            [Test]
-            public void Call_Parses_Single_Element_From_Json_Repsonse()
-            {
-                using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Single.json"))
-                {
-                    var policeApi = new PoliceUkClient
-                    {
-                        RequestFactory = CreateRequestFactory(stream)
-                    };
-
-                    StreetLevelCrimeResults result = policeApi.StreetLevelCrimes(A.Fake<IGeoposition>());
-
-                    // Assert
-                    Assert.IsNotNull(result);
-                    Assert.IsNotNull(result.Crimes);
-
-                    Crime crime = result.Crimes.First();
-                    CustomAssert.AreEqual(TestCrime, crime, new CrimeEqualityComparer());
-                }
-            }
-
-            [Test]
-            public void Call_Parses_Multiple_Elements_From_Json_Repsonse()
-            {
-                using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Multiple.json"))
+                using (Stream stream = GetTestDataFromResource(jsonResourceName))
                 {
                     IPoliceUkClient policeApi = new PoliceUkClient
                     {
@@ -164,39 +185,21 @@
 
                     // Assert
                     Assert.IsNotNull(result);
-                    Assert.IsNotNull(result.Crimes);
+                    Assert.That(result.Crimes, Is.Not.Null.And.Length.EqualTo(expectedCrimes.Length));
 
-                    Assert.AreEqual(2, result.Crimes.Count());
-
-                    Crime crime = result.Crimes.First();
-                    CustomAssert.AreEqual(new Crime
+                    int total = result.Crimes.Count();
+                    for (int i = 0; i < total; i++)
                     {
-                        Category = "anti-social-behaviour",
-                        PersistentId = "",
-                        LocationType = "Force",
-                        LocationSubtype = "",
-                        Id = "20599642",
-                        Location = new CrimeLocation
-                        {
-                            Latitude = 52.6269479,
-                            Longitude = -1.1121716,
-                            Street = new Street
-                            {
-                                Id = 882380,
-                                Name = "On or near Cedar Road"
-                            }
-                        },
-                        Context = "",
-                        Month = "2013-01",
-                        OutcomeStatus = null
-                    }, crime, new CrimeEqualityComparer());
+                        Crime expected = expectedCrimes[i];
+                        Crime actual   = result.Crimes.ElementAtOrDefault(i);
 
-                    crime = result.Crimes.Last();
-                    CustomAssert.AreEqual(TestCrime, crime, new CrimeEqualityComparer());
+                        CustomAssert.AreEqual(expected, actual, new CrimeEqualityComparer());
+                    }
                 }
             }
         }
 
+        [TestFixture]
         public class PolygonOverride
         {
             [Test]
@@ -207,7 +210,7 @@
             }
 
             [Test]
-            [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
+            [ExpectedException(typeof(InvalidDataException))]
             public void Call_With_Malformed_Response_Throwns_InvalidDataException()
             {
                 using (Stream stream = GetTestDataFromResource(MalformedTestDataResource))

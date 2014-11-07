@@ -16,12 +16,57 @@
     [TestFixture]
     public class CrimeCategories : BaseMethodTests
     {
-        private static readonly Category TestCategory = 
+        #region Dummy data
+
+        private static readonly Category CategoryOne = 
             new Category
+            {
+                Url = "burglary",
+                Name = "Burglary"
+            };
+
+        private static readonly Category CategoryTwo =
+            new Category
+            {
+                Url = "all-crime",
+                Name = "All crime and ASB"
+            };
+
+        #endregion
+
+        private static readonly object[] NoCategory = 
+            {
+                new object[]
                 {
-                    Url = "burglary",
-                    Name = "Burglary"
-                };
+                    EmptyArrayTestDataResource, 
+                    new Category[]{}
+                }
+            };
+
+        private static readonly object[] DummyCategory = 
+            {
+                new object[]
+                {
+                    "PoliceUK.Tests.Unit.TestData.CrimeCatagories.Single.json", 
+                    new Category[]
+                    {
+                        CategoryOne
+                    }
+                }
+            };
+
+        private static readonly object[] DummyCategories = 
+            {
+                new object[]
+                {
+                    "PoliceUK.Tests.Unit.TestData.CrimeCatagories.Multiple.json", 
+                    new Category[]
+                    {
+                        CategoryOne, 
+                        CategoryTwo
+                    }
+                }
+            };
 
         [Test]
         [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
@@ -59,28 +104,10 @@
             }
         }
 
-        [Test]
-        public void Call_Parses_No_Elements_From_Json_Repsonse()
+        [Test, TestCaseSource("NoCategory"), TestCaseSource("DummyCategory"), TestCaseSource("DummyCategories")]
+        public void Call_Parses_Elements_From_Json_Repsonse(string jsonResourceName, Category[] expectedCategorys)
         {
-            using (Stream stream = GetTestDataFromResource(EmptyArrayTestDataResource))
-            {
-                var policeApi = new PoliceUkClient
-                {
-                    RequestFactory = CreateRequestFactory(stream)
-                };
-
-                IEnumerable<Category> categories = policeApi.CrimeCategories(DateTime.Now);
-
-                // Assert
-                Assert.IsNotNull(categories);
-                Assert.AreEqual(0, categories.Count());
-            }
-        }
-
-        [Test]
-        public void Call_Parses_Single_Element_From_Json_Repsonse()
-        {
-            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.CrimeCatagories.Single.json"))
+            using (Stream stream = GetTestDataFromResource(jsonResourceName))
             {
                 var policeApi = new PoliceUkClient
                 {
@@ -89,37 +116,16 @@
                 IEnumerable<Category> categories = policeApi.CrimeCategories(DateTime.Now);
 
                 // Assert
-                Assert.IsNotNull(categories);
+                Assert.That(categories, Is.Not.Null.And.Length.EqualTo(expectedCategorys.Length));
 
-                Category category = categories.First();
-                CustomAssert.AreEqual(TestCategory, category, new CategoryEqualityComparer());
-            }
-        }
-
-        [Test]
-        public void Call_Parses_Multiple_Elements_From_Json_Repsonse()
-        {
-            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.CrimeCatagories.Multiple.json"))
-            {
-                var policeApi = new PoliceUkClient
+                int total = categories.Count();
+                for (int i = 0; i < total; i++)
                 {
-                    RequestFactory = CreateRequestFactory(stream)
-                };
-                IEnumerable<Category> categories = policeApi.CrimeCategories(DateTime.Now);
+                    Category expected = expectedCategorys[i];
+                    Category actual   = categories.ElementAtOrDefault(i);
 
-                // Assert
-                Assert.IsNotNull(categories);
-                Assert.AreEqual(2, categories.Count());
-
-                Category category = categories.First();
-                CustomAssert.AreEqual(new Category
-                {
-                    Url = "all-crime",
-                    Name = "All crime and ASB"
-                }, category, new CategoryEqualityComparer());
-
-                category = categories.Last();
-                CustomAssert.AreEqual(TestCategory, category, new CategoryEqualityComparer());
+                    CustomAssert.AreEqual(expected, actual, new CategoryEqualityComparer());
+                }
             }
         }
     }

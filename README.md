@@ -6,14 +6,28 @@ Installation
 ------------
 Download the [latest release][latest-release] and add a reference to `PoliceUK.dll` in your project.
 
-Example Usage
--------------
+Example Usages
+--------------
 
-### Get a summary for all forces
+**Get a summary for all forces**
 
 ```csharp
 var policeClient = new PoliceUkClient();
 IEnumerable<ForceSummary> forces = policeClient.Forces();
+```
+
+**Get street level crimes**
+
+```csharp
+var policeClient = new PoliceUkClient();
+
+var chawton = new Geoposition(51.133112, -0.989054);
+StreetLevelCrimeResults results = policeClient.StreetLevelCrimes(chawton);
+
+foreach (Crime crime in results.Crimes)
+{
+    Console.WriteLine(crime.Category);
+}
 ```
 
 Prerequisites

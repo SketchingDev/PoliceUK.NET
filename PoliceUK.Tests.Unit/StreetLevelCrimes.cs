@@ -165,9 +165,12 @@
                     policeApi.StreetLevelCrimes(geoPosition);
 
                     // Assert
+                    string latitude  = geoPosition.Latitiude.ToString();
+                    string longitude = geoPosition.Longitude.ToString();
+
                     IHttpWebRequestFactory factory = policeApi.RequestFactory;
-                    A.CallTo(() => factory.Create(A<string>.That.Contains(geoPosition.Latitiude.ToString()))).MustHaveHappened();
-                    A.CallTo(() => factory.Create(A<string>.That.Contains(geoPosition.Longitude.ToString()))).MustHaveHappened();
+                    A.CallTo(() => factory.Create(A<string>.That.Contains(latitude ))).MustHaveHappened();
+                    A.CallTo(() => factory.Create(A<string>.That.Contains(longitude))).MustHaveHappened();
                 }
             }
 

@@ -1,4 +1,4 @@
-﻿namespace PoliceUK.Tests.Unit.CustomAssertions.Equality
+﻿namespace PoliceUk.Tests.Unit.CustomAssertions.Equality
 {
     using Entities.Force;
     using NUnit.Framework;

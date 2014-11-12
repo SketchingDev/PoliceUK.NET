@@ -7,7 +7,7 @@
     <ProjectGuid>{77F897F9-DB9D-4ED9-A1D7-58F334027388}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PoliceUK</RootNamespace>
+    <RootNamespace>PoliceUk</RootNamespace>
     <AssemblyName>PoliceUK</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

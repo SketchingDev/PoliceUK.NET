@@ -1,4 +1,4 @@
-﻿namespace PoliceUK.Tests.Unit.CustomAssertions.Equality.Location
+﻿namespace PoliceUk.Tests.Unit.CustomAssertions.Equality.Location
 {
     using NUnit.Framework;
     using PoliceUk.Entities.Location;

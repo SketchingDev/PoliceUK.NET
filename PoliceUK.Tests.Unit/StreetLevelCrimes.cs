@@ -1,4 +1,4 @@
-﻿namespace PoliceUK.Tests.Unit
+﻿namespace PoliceUk.Tests.Unit
 {
     using CustomAssertions;
     using CustomAssertions.Equality;
@@ -6,15 +6,13 @@
     using FakeItEasy;
     using NUnit.Framework;
     using PoliceUk;
-    using PoliceUk.Entities;
-    using PoliceUk.Entities.Location;
-    using PoliceUk.Request;
-    using PoliceUk.Tests.Unit;
+    using Entities.Location;
+    using Request;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using InvalidDataException = PoliceUk.Exceptions.InvalidDataException;
+    using InvalidDataException = Exceptions.InvalidDataException;
 
     public class StreetLevelCrimes : BaseMethodTests
     {

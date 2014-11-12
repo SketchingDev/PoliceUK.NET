@@ -1,6 +1,5 @@
-﻿namespace PoliceUK.Entities
+﻿namespace PoliceUk.Entities
 {
-    using PoliceUk.Entities;
     using System.Collections.Generic;
 
     public class StreetLevelCrimeResults

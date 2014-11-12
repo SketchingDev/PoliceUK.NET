@@ -1,7 +1,7 @@
-﻿namespace PoliceUK
+﻿namespace PoliceUk
 {
-    using PoliceUk.Exceptions;
-    using PoliceUk.Request;
+    using Exceptions;
+    using Request;
     using System;
     using System.IO;
     using System.Net;

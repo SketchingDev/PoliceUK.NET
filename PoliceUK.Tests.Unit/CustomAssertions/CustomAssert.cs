@@ -1,4 +1,4 @@
-﻿namespace PoliceUK.Tests.Unit.CustomAssertions
+﻿namespace PoliceUk.Tests.Unit.CustomAssertions
 {
     using NUnit.Framework;
     using System;

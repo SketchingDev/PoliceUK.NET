@@ -1,4 +1,4 @@
-﻿namespace PoliceUK.Entities.Force
+﻿namespace PoliceUk.Entities.Force
 {
     using System.Collections.Generic;
     using System.Runtime.Serialization;

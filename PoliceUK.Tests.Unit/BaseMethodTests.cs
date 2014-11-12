@@ -2,7 +2,7 @@
 {
     using FakeItEasy;
     using NUnit.Framework;
-    using PoliceUK.Request.Response;
+    using Request.Response;
     using Request;
     using System.IO;
     using System.Net;

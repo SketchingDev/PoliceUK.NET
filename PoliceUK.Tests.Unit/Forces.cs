@@ -1,11 +1,10 @@
-﻿namespace PoliceUK.Tests.Unit
+﻿namespace PoliceUk.Tests.Unit
 {
     using CustomAssertions;
     using CustomAssertions.Equality;
     using Entities.Force;
     using NUnit.Framework;
     using PoliceUk;
-    using PoliceUk.Tests.Unit;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -64,7 +63,7 @@
             };
 
         [Test]
-        [ExpectedException(typeof(PoliceUk.Exceptions.InvalidDataException))]
+        [ExpectedException(typeof(Exceptions.InvalidDataException))]
         public void Call_With_Malformed_Response_Throwns_InvalidDataException()
         {
             using (Stream stream = GetTestDataFromResource(MalformedTestDataResource))

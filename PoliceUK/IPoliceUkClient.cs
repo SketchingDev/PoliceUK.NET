@@ -1,8 +1,7 @@
 ﻿namespace PoliceUk
 {
     using Entities;
-    using PoliceUK.Entities;
-    using PoliceUK.Entities.Force;
+    using Entities.Force;
     using System;
     using System.Collections.Generic;
 

@@ -2,10 +2,8 @@
 {
     using Entities;
     using Newtonsoft.Json;
-    using PoliceUK;
-    using PoliceUK.Entities;
-    using PoliceUK.Entities.Force;
-    using PoliceUK.Request.Response;
+    using Entities.Force;
+    using Request.Response;
     using Request;
     using System;
     using System.Collections.Generic;

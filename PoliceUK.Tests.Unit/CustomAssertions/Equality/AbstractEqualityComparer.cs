@@ -1,4 +1,4 @@
-﻿namespace PoliceUK.Tests.Unit.CustomAssertions.Equality
+﻿namespace PoliceUk.Tests.Unit.CustomAssertions.Equality
 {
     using System;
     using System.Collections.Generic;

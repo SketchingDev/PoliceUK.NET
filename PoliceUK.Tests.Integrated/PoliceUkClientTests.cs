@@ -1,10 +1,9 @@
-﻿namespace PoliceUK.Tests.Integrated
+﻿namespace PoliceUk.Tests.Integrated
 {
     using Entities;
     using Entities.Force;
     using NUnit.Framework;
     using PoliceUk;
-    using PoliceUk.Entities;
     using System;
     using System.Collections.Generic;
     using System.Linq;

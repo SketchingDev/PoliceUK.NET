@@ -1,6 +1,5 @@
-﻿namespace PoliceUK.Request.Response
+﻿namespace PoliceUk.Request.Response
 {
-    using PoliceUk.Request;
     using System;
     using System.IO;
     using System.Net;

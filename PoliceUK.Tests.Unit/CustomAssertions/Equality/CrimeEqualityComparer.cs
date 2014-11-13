@@ -1,9 +1,9 @@
 ﻿namespace PoliceUk.Tests.Unit.CustomAssertions.Equality
 {
+    using Entities.Location;
+    using Entities.StreetLevel;
     using Location;
     using NUnit.Framework;
-    using PoliceUk.Entities;
-    using PoliceUk.Entities.Location;
     using System.Collections.Generic;
 
     public class CrimeEqualityComparer : AbstractEqualityComparer<Crime>

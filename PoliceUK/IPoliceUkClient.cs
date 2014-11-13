@@ -1,4 +1,6 @@
-﻿namespace PoliceUk
+﻿using PoliceUk.Entities.StreetLevel;
+
+namespace PoliceUk
 {
     using Entities;
     using Entities.Force;
@@ -47,5 +49,10 @@
         /// </summary>
         /// <param name="id">Unique force identifier. These are available from <see cref="Forces()"/>.</param>
         ForceDetails Force(string id);
+
+        /// <summary>
+        /// Return a list of available data sets.
+        /// </summary>
+        IEnumerable<Availability> StreetLevelAvailability();
     }
 }

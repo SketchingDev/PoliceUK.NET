@@ -1,4 +1,6 @@
-﻿namespace PoliceUk
+﻿using PoliceUk.Entities.StreetLevel;
+
+namespace PoliceUk
 {
     using Entities;
     using Newtonsoft.Json;
@@ -108,6 +110,16 @@
                 // Do not automatically parse response, as if force is not found then non-json response returned
                 return (x.StatusCode == HttpStatusCode.OK) ? JsonResponseProcessor<ForceDetails>(x) : null; 
             });
+
+            return response.Data;
+        }
+
+        public IEnumerable<Availability> StreetLevelAvailability()
+        {
+            string url = string.Format("{0}crimes-street-dates", ApiPath);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+            ParsedResponse<Availability[]> response = ProcessJsonRequest<Availability[]>(request);
 
             return response.Data;
         }

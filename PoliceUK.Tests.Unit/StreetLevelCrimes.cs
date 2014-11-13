@@ -1,4 +1,6 @@
-﻿namespace PoliceUk.Tests.Unit
+﻿using PoliceUk.Entities.StreetLevel;
+
+namespace PoliceUk.Tests.Unit
 {
     using CustomAssertions;
     using CustomAssertions.Equality;

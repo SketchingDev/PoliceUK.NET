@@ -2,6 +2,7 @@
 {
     using Entities;
     using Entities.Force;
+    using Entities.StreetLevel;
     using NUnit.Framework;
     using PoliceUk;
     using System;
@@ -99,6 +100,18 @@
 
             // Assert
             Assert.IsNull(force);
+        }
+
+        [Test]
+        public void StreetLevelAvailability_Call_Returns_Results()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<Availability> availableCrimeDates 
+                = policeApi.StreetLevelAvailability();
+
+            // Assert
+            Assert.That(availableCrimeDates, Is.Not.Null.And.Not.Empty);
         }
     }
 }

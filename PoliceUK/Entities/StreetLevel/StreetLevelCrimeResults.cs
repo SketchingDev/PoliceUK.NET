@@ -1,4 +1,4 @@
-﻿namespace PoliceUk.Entities
+﻿namespace PoliceUk.Entities.StreetLevel
 {
     using System.Collections.Generic;
 

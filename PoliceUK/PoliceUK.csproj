@@ -44,13 +44,14 @@
   <ItemGroup>
     <Compile Include="ApiClient.cs" />
     <Compile Include="Entities\Category.cs" />
-    <Compile Include="Entities\Crime.cs" />
+    <Compile Include="Entities\StreetLevel\Crime.cs" />
     <Compile Include="Entities\Force\ForceDetails.cs" />
     <Compile Include="Entities\Force\ForceSummary.cs" />
     <Compile Include="Entities\Force\ForceEngagementMethod.cs" />
     <Compile Include="Entities\Location\CrimeLocation.cs" />
     <Compile Include="Entities\Location\Street.cs" />
     <Compile Include="Entities\OutcomeStatus.cs" />
+    <Compile Include="Entities\StreetLevel\Availability.cs" />
     <Compile Include="Exceptions\DataRequestException.cs" />
     <Compile Include="Exceptions\InvalidDataException.cs" />
     <Compile Include="Geoposition.cs" />
@@ -64,7 +65,7 @@
     <Compile Include="Request\Response\IHttpWebResponse.cs" />
     <Compile Include="Request\Response\HttpWebResponseWrapper.cs" />
     <Compile Include="Request\HttpWebRequestFactory.cs" />
-    <Compile Include="Entities\StreetLevelCrimeResults.cs" />
+    <Compile Include="Entities\StreetLevel\StreetLevelCrimeResults.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

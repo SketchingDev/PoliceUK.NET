@@ -54,7 +54,9 @@
     <Compile Include="CustomAssertions\Equality\ForceSummaryEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\Location\CrimeLocationEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\Location\StreetEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\StreetLevel\AvailabilityEqualityComparer.cs" />
     <Compile Include="Force.cs" />
+    <Compile Include="StreetLevelAvailability.cs" />
     <Compile Include="Forces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreetLevelCrimes.cs" />
@@ -71,6 +73,8 @@
     <EmbeddedResource Include="TestData\Malformed.json" />
     <EmbeddedResource Include="TestData\StreetLevelCrimes.Multiple.json" />
     <EmbeddedResource Include="TestData\StreetLevelCrimes.Single.json" />
+    <EmbeddedResource Include="TestData\StreetLevelAvailability.Single.json" />
+    <EmbeddedResource Include="TestData\StreetLevelAvailability.Multiple.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TestData\Force.NotFound.txt" />

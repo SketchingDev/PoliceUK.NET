@@ -1,7 +1,7 @@
-﻿namespace PoliceUk.Entities
+﻿namespace PoliceUk.Entities.StreetLevel
 {
-    using Location;
     using System.Runtime.Serialization;
+    using Location;
 
     [DataContract]
     public class Crime

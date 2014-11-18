@@ -114,6 +114,7 @@ namespace PoliceUk
             return response.Data;
         }
 
+        //TODO Output array of DateTime, no benefit to Availability wrapper
         public IEnumerable<Availability> StreetLevelAvailability()
         {
             string url = string.Format("{0}crimes-street-dates", ApiPath);

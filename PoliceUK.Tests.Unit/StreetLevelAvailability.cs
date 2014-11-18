@@ -1,4 +1,6 @@
-﻿namespace PoliceUk.Tests.Unit
+﻿using System;
+
+namespace PoliceUk.Tests.Unit
 {
     using CustomAssertions;
     using CustomAssertions.Equality.StreetLevel;
@@ -16,12 +18,12 @@
 
         private static readonly Availability AvailabilityOne = new Availability
             {
-                Date = "2011-09"
+                Date = new DateTime(2011, 9, 1)
             };
 
         private static readonly Availability AvailabilityTwo = new Availability
             {
-                Date = "2011-08"
+                Date = new DateTime(2011, 8, 1)
             };
 
         #endregion

@@ -1,12 +1,12 @@
-﻿using PoliceUk.Entities.StreetLevel;
-
-namespace PoliceUk
+﻿namespace PoliceUk
 {
     using Entities;
-    using Newtonsoft.Json;
     using Entities.Force;
-    using Request.Response;
+    using Entities.StreetLevel;
+    using Newtonsoft.Json;
+    using PoliceUk.Entities.Neighbourhood;
     using Request;
+    using Request.Response;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -56,7 +56,7 @@ namespace PoliceUk
 
             // Post data
             IEnumerable<string> polygonSections = polygon.Select(T => T.Latitiude.ToString() + "," + T.Longitude.ToString());
-            string postData = "poly=" + String.Join(":", polygonSections.ToArray());
+            string postData = "poly=" + string.Join(":", polygonSections.ToArray());
             if (date.HasValue) postData += string.Format("&date={0:yyyy'-'MM}", date.Value);
 
             var ascii = new ASCIIEncoding();
@@ -115,12 +115,103 @@ namespace PoliceUk
         }
 
         //TODO Output array of DateTime, no benefit to Availability wrapper
-        public IEnumerable<Availability> StreetLevelAvailability()
+        public IEnumerable<DateTime> StreetLevelAvailability()
         {
             string url = string.Format("{0}crimes-street-dates", ApiPath);
 
             IHttpWebRequest request = BuildGetWebRequest(url);
             ParsedResponse<Availability[]> response = ProcessJsonRequest<Availability[]>(request);
+
+            Availability[] availabilities = response.Data;
+            return availabilities.Select(x => x.Date).ToArray();
+        }
+
+        public IEnumerable<NeighbourhoodSummary> Neighbourhoods(string forceId)
+        {
+            if (forceId == null)
+            {
+                throw new ArgumentNullException("forceId");
+            }
+
+            string url = string.Format("{0}{1}/neighbourhoods", ApiPath, forceId);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+            ParsedResponse<NeighbourhoodSummary[]> response = ProcessJsonRequest<NeighbourhoodSummary[]>(request);
+
+            return response.Data;
+        }
+
+        public NeighbourhoodForce LocateNeighbourhood(IGeoposition position) // TODO Rename to just 'neighbourhood'
+        {
+            if (position == null)
+            {
+                throw new ArgumentNullException("position");
+            }
+
+            string url = string.Format("{0}locate-neighbourhood?q={1},{2}", ApiPath,
+                position.Latitiude, 
+                position.Longitude);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+            ParsedResponse<NeighbourhoodForce> response = ProcessRequest(request, x =>
+            {
+                // Do not automatically parse response, as if force is not found then non-json response returned
+                return (x.StatusCode == HttpStatusCode.OK) ? JsonResponseProcessor<NeighbourhoodForce>(x) : null;
+            });
+
+            return response.Data;
+        }
+
+        public IEnumerable<Crime> Crimes(string forceId, string category, DateTime? date = null)
+        {
+            if (category == null || forceId == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            string url = string.Format("{0}crimes-no-location?category={1}&force={2}", ApiPath,
+                category,
+                forceId);
+
+            if (date.HasValue) url += string.Format("&date={0:yyyy'-'MM}", date.Value);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+            ParsedResponse<Crime[]> response = ProcessJsonRequest<Crime[]>(request);
+
+            return response.Data;
+        }
+
+        public IEnumerable<Crime> CrimesAtLocation(string locationId, DateTime date)
+        {
+            if (locationId == null)
+            {
+                throw new ArgumentNullException("locationId");
+            }
+
+            string url = string.Format("{0}crimes-at-location?location_id={1}&date={2:yyyy'-'MM}", ApiPath,
+                locationId,
+                date);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+            ParsedResponse<Crime[]> response = ProcessJsonRequest<Crime[]>(request);
+
+            return response.Data;
+        }
+
+        public IEnumerable<Crime> CrimesAtLocation(IGeoposition position, DateTime date)
+        {
+            if (position == null)
+            {
+                throw new ArgumentNullException("position");
+            }
+
+            string url = string.Format("{0}crimes-at-location?lat={1}&lng={2}&date={3:yyyy'-'MM}", ApiPath,
+                position.Latitiude,
+                position.Longitude,
+                date);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+            ParsedResponse<Crime[]> response = ProcessJsonRequest<Crime[]>(request);
 
             return response.Data;
         }

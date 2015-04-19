@@ -1,30 +1,20 @@
-﻿using System;
-
-namespace PoliceUk.Tests.Unit
+﻿namespace PoliceUk.Tests.Unit
 {
-    using CustomAssertions;
-    using CustomAssertions.Equality.StreetLevel;
-    using Entities.StreetLevel;
     using NUnit.Framework;
     using PoliceUk;
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
 
     [TestFixture]
-    public class StreetLevelAvailability : BaseMethodTests
+    public class StreetLevelAvailabilityTests : BaseMethodTests
     {
         #region Dummy data
 
-        private static readonly Availability AvailabilityOne = new Availability
-            {
-                Date = new DateTime(2011, 9, 1)
-            };
+        private static readonly DateTime AvailabilityOne = new DateTime(2011, 9, 1);
 
-        private static readonly Availability AvailabilityTwo = new Availability
-            {
-                Date = new DateTime(2011, 8, 1)
-            };
+        private static readonly DateTime AvailabilityTwo = new DateTime(2011, 8, 1);
 
         #endregion
 
@@ -33,7 +23,7 @@ namespace PoliceUk.Tests.Unit
                 new object[]
                 {
                     EmptyArrayTestDataResource, 
-                    new Availability[]{}
+                    new DateTime[]{}
                 }
             };
 
@@ -42,7 +32,7 @@ namespace PoliceUk.Tests.Unit
                 new object[]
                 {
                     "PoliceUK.Tests.Unit.TestData.StreetLevelAvailability.Single.json", 
-                    new Availability[]
+                    new DateTime[]
                     {
                         AvailabilityOne
                     }
@@ -54,7 +44,7 @@ namespace PoliceUk.Tests.Unit
                 new object[]
                 {
                     "PoliceUK.Tests.Unit.TestData.StreetLevelAvailability.Multiple.json", 
-                    new Availability[]
+                    new DateTime[]
                     {
                         AvailabilityOne, 
                         AvailabilityTwo
@@ -78,7 +68,7 @@ namespace PoliceUk.Tests.Unit
         }
 
         [Test, TestCaseSource("NoAvailability"), TestCaseSource("DummyAvailability"), TestCaseSource("DummyAvailabilities")]
-        public void Call_Parses_Elements_From_Json_Repsonse(string jsonResourceName, Availability[] expectedAvailabilities)
+        public void Call_Parses_Elements_From_Json_Repsonse(string jsonResourceName, DateTime[] expectedAvailabilities)
         {
             using (Stream stream = GetTestDataFromResource(jsonResourceName))
             {
@@ -86,7 +76,7 @@ namespace PoliceUk.Tests.Unit
                 {
                     RequestFactory = CreateRequestFactory(stream)
                 };
-                IEnumerable<Availability> availableCrimeDates = policeApi.StreetLevelAvailability();
+                IEnumerable<DateTime> availableCrimeDates = policeApi.StreetLevelAvailability();
 
                 // Assert
                 Assert.That(availableCrimeDates, Is.Not.Null.And.Length.EqualTo(expectedAvailabilities.Length));
@@ -94,10 +84,10 @@ namespace PoliceUk.Tests.Unit
                 int total = availableCrimeDates.Count();
                 for (int i = 0; i < total; i++)
                 {
-                    Availability expected = expectedAvailabilities[i];
-                    Availability actual = availableCrimeDates.ElementAtOrDefault(i);
+                    DateTime expected = expectedAvailabilities[i];
+                    DateTime actual = availableCrimeDates.ElementAtOrDefault(i);
 
-                    CustomAssert.AreEqual(expected, actual, new AvailabilityEqualityComparer());
+                    Assert.AreEqual(expected, actual);
                 }
             }
         }

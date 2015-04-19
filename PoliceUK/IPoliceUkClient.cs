@@ -1,9 +1,9 @@
-﻿using PoliceUk.Entities.StreetLevel;
-
-namespace PoliceUk
+﻿namespace PoliceUk
 {
     using Entities;
     using Entities.Force;
+    using Entities.StreetLevel;
+    using Entities.Neighbourhood;
     using System;
     using System.Collections.Generic;
 
@@ -53,6 +53,57 @@ namespace PoliceUk
         /// <summary>
         /// Return a list of available data sets.
         /// </summary>
-        IEnumerable<Availability> StreetLevelAvailability();
+        IEnumerable<DateTime> StreetLevelAvailability();
+
+        /// <summary>
+        /// Returns a list of neighbourhoods for a specific force.
+        /// </summary>
+        /// <param name="forceId">Unique force identifier. These are available from <see cref="Forces()"/>.</param>
+        IEnumerable<NeighbourhoodSummary> Neighbourhoods(string forceId); // TODO Also accept ForceDetails as an argument.
+
+        /// <summary>
+        /// Returns the neighbourhood and policing team responsible for a particular area. 
+        /// </summary>
+        /// <param name="position">Latitude and Longitude of the area</param>
+        NeighbourhoodForce LocateNeighbourhood(IGeoposition position);
+
+        /// <summary>
+        /// Returns a list of crimes where the responsible force hasn't specified a location.
+        /// </summary>
+        /// <param name="category">The <see cref="CrimeCategories(DateTime)">category</see> of the crimes</param>
+        /// <param name="forceId">Specific police force</param>
+        /// <param name="date">
+        /// Limit results to a specific Year and Month.
+        /// The latest month will be shown by default
+        /// </param>
+        /// <returns>Crimes where the responsible force hasn't specified a location</returns>
+        IEnumerable<Crime> Crimes(string forceId, string category, DateTime? date = null);
+
+        /// <summary>
+        /// Returns just the crimes which occurred at the specified location, rather than those within a radius.
+        /// If given latitude and longitude, finds the nearest pre-defined location and returns the crimes which occurred there.
+        /// </summary>
+        /// <param name="locationId">
+        /// Crimes and outcomes are mapped to specific locations on the map.
+        /// Valid IDs are returned by other methods (new and existing) which return location information.
+        /// </param>
+        /// <param name="date">
+        /// Limit results to a specific Year and Month.
+        /// The latest month will be shown by default.
+        /// </param>
+        /// <returns>Crimes which occurred at the specified location, rather than those within a radius</returns>
+        IEnumerable<Crime> CrimesAtLocation(string locationId, DateTime date); // TODO Also accept Street as an argument (location comes from its ID)
+
+        /// <summary>
+        /// Returns just the crimes which occurred at the specified location, rather than those within a radius.
+        /// If given latitude and longitude, finds the nearest pre-defined location and returns the crimes which occurred there.
+        /// </summary>
+        /// <param name="position">Latitude/Longitude of the requested crime area</param>
+        /// <param name="date">
+        /// Limit results to a specific Year and Month.
+        /// The latest month will be shown by default.
+        /// </param>
+        /// <returns>Crimes which occurred at the specified location, rather than those within a radius</returns>
+        IEnumerable<Crime> CrimesAtLocation(IGeoposition position, DateTime date);
     }
 }

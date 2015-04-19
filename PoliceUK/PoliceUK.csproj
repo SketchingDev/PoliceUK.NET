@@ -44,6 +44,13 @@
   <ItemGroup>
     <Compile Include="ApiClient.cs" />
     <Compile Include="Entities\Category.cs" />
+    <Compile Include="Entities\Neighbourhood\ContactDetails.cs" />
+    <Compile Include="Entities\Neighbourhood\Link.cs" />
+    <Compile Include="Entities\Neighbourhood\NeighbourhoodDetails.cs" />
+    <Compile Include="Entities\Neighbourhood\NeighbourhoodForce.cs" />
+    <Compile Include="Entities\Neighbourhood\NeighbourhoodLocation.cs" />
+    <Compile Include="Entities\Neighbourhood\NeighbourhoodPriority.cs" />
+    <Compile Include="Entities\Neighbourhood\NeighbourhoodSummary.cs" />
     <Compile Include="Entities\StreetLevel\Crime.cs" />
     <Compile Include="Entities\Force\ForceDetails.cs" />
     <Compile Include="Entities\Force\ForceSummary.cs" />
@@ -70,6 +77,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

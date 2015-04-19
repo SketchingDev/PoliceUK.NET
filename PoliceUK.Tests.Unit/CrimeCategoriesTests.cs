@@ -13,7 +13,7 @@
     using System.Linq;
 
     [TestFixture]
-    public class CrimeCategories : BaseMethodTests
+    public class CrimeCategoriesTests : BaseMethodTests
     {
         #region Dummy data
 

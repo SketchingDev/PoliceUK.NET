@@ -10,7 +10,7 @@
     using System.Linq;
 
     [TestFixture]
-    public class Forces : BaseMethodTests
+    public class ForcesTests : BaseMethodTests
     {
         #region Dummy data
 

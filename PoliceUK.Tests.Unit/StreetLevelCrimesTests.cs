@@ -1,112 +1,24 @@
-﻿using PoliceUk.Entities.StreetLevel;
-
-namespace PoliceUk.Tests.Unit
+﻿namespace PoliceUk.Tests.Unit
 {
     using CustomAssertions;
     using CustomAssertions.Equality;
-    using Entities;
     using FakeItEasy;
     using NUnit.Framework;
     using PoliceUk;
-    using Entities.Location;
     using Request;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using InvalidDataException = Exceptions.InvalidDataException;
+    using Entities.StreetLevel;
+    using TestDataFactories;
 
-    public class StreetLevelCrimes : BaseMethodTests
+    public class StreetLevelCrimesTests : BaseMethodTests
     {
-        #region Dummy data
-
-        private static readonly Crime DummyStreetLevelCrimeOne = new Crime
-        {
-            Category = "anti-social-behaviour",
-            PersistentId = "",
-            LocationType = "Force",
-            LocationSubtype = "",
-            Id = "20599642",
-            Location = new CrimeLocation
-            {
-                Latitude = 52.6269479,
-                Longitude = -1.1121716,
-                Street = new Street
-                {
-                    Id = 882380,
-                    Name = "On or near Cedar Road"
-                }
-            },
-            Context = "",
-            Month = "2013-01",
-            OutcomeStatus = null
-        };
-
-        private static readonly Crime DummyStreetLevelCrimeTwo = new Crime
-        {
-            Category = "burglary",
-            PersistentId = "aebd220e869a235ba92cde43f7e0df29001573b3df1b094bb952820b2b8f44b0",
-            LocationType = "Force",
-            LocationSubtype = "",
-            Id = "20604632",
-            Location = new CrimeLocation
-            {
-                Latitude = 52.6271606,
-                Longitude = -1.1485111,
-                Street = new Street
-                {
-                    Id = 882208,
-                    Name = "On or near Norman Street"
-                }
-            },
-            Context = "Example context",
-            Month = "2013-01",
-            OutcomeStatus = new OutcomeStatus
-            {
-                Category = "Under investigation",
-                Date = "2013-01"
-            }
-        };
-
-        #endregion
-
         [TestFixture]
         public class LatLngOverride
         {
-            private static readonly object[] NoStreetLevelCrime = 
-            {
-                new object[]
-                {
-                    EmptyArrayTestDataResource, 
-                    new Crime[]{}
-                }
-            };
-
-            private static readonly object[] DummyStreetLevelCrime = 
-            {
-                new object[]
-                {
-                    "PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Single.json", 
-                    new Crime[]
-                    {
-                        DummyStreetLevelCrimeOne
-                    }
-                }
-            };
-
-            private static readonly object[] DummyStreetLevelCrimes = 
-            {
-                new object[]
-                {
-                    "PoliceUK.Tests.Unit.TestData.StreetLevelCrimes.Multiple.json", 
-                    new Crime[]
-                    {
-                        DummyStreetLevelCrimeOne, 
-                        DummyStreetLevelCrimeTwo
-                    }
-                }
-            };
-
             [Test]
             [ExpectedException(typeof(ArgumentNullException))]
             public void Call_With_Null_Position_Throws_ArgumentNullException()
@@ -174,7 +86,9 @@ namespace PoliceUk.Tests.Unit
                 }
             }
 
-            [Test, TestCaseSource("NoStreetLevelCrime"), TestCaseSource("DummyStreetLevelCrime"), TestCaseSource("DummyStreetLevelCrimes")]
+            [Test, TestCaseSource(typeof(CrimeDataFactory), "NoCrime"), 
+                   TestCaseSource(typeof(CrimeDataFactory), "DummyCrime"), 
+                   TestCaseSource(typeof(CrimeDataFactory), "DummyCrimes")]
             public void Call_Parses_Elements_From_Json_Repsonse(string jsonResourceName, Crime[] expectedCrimes)
             {
                 using (Stream stream = GetTestDataFromResource(jsonResourceName))

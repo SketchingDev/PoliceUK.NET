@@ -11,7 +11,7 @@
     using System.Linq;
 
     [TestFixture]
-    public class Force : BaseMethodTests
+    public class ForceTests : BaseMethodTests
     {
         #region Dummy data
 
@@ -77,7 +77,7 @@
         [Test]
         public void Call_Parses_No_Element_From_Json_Repsonse()
         {
-            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.Force.NotFound.txt"))
+            using (Stream stream = GetTestDataFromResource("PoliceUK.Tests.Unit.TestData.NotFound.txt"))
             {
                 var policeApi = new PoliceUkClient
                 {
@@ -105,9 +105,9 @@
                 // Assert
                 Assert.IsNotNull(force);
 
-                CustomAssert.AreEqual(DummyForceDetails, force, new ForceDetailsEqualityComparer());
+                CustomAssert.AreEqual(expectedForceDetails, force, new ForceDetailsEqualityComparer());
 
-                IEnumerable<ForceEngagementMethod> actualEngagementMethods   = force.EngagementMethods;
+                IEnumerable<ForceEngagementMethod> actualEngagementMethods = force.EngagementMethods;
                 ForceEngagementMethod[] expectedEngagementMethods = expectedForceDetails.EngagementMethods.ToArray();
 
                 Assert.That(actualEngagementMethods, Is.Not.Null.And.Count.EqualTo(expectedEngagementMethods.Length));

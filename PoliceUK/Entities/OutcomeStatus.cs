@@ -15,6 +15,6 @@
         /// Date of the outcome.
         /// </summary>
         [DataMember(Name = "date")]
-        public string Date { get; set; }
+        public string Date { get; set; } // TODO use DateTime instead of String
     }
 }

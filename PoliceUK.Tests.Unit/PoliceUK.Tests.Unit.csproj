@@ -44,22 +44,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseMethodTests.cs" />
-    <Compile Include="CrimeCategories.cs" />
+    <Compile Include="CrimeCategoriesTests.cs" />
+    <Compile Include="CrimesAtLocationTests.cs" />
+    <Compile Include="TestDataFactories\CrimeDataFactory.cs" />
     <Compile Include="CustomAssertions\CustomAssert.cs" />
     <Compile Include="CustomAssertions\Equality\AbstractEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\CategoryEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\CrimeEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\ForceDetails\ForceDetailsEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\ForceDetails\ForceEngagementMethodEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\NeighbourhoodForceEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\ForceSummaryEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\Location\CrimeLocationEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\Location\StreetEqualityComparer.cs" />
-    <Compile Include="CustomAssertions\Equality\StreetLevel\AvailabilityEqualityComparer.cs" />
-    <Compile Include="Force.cs" />
-    <Compile Include="StreetLevelAvailability.cs" />
-    <Compile Include="Forces.cs" />
+    <Compile Include="CustomAssertions\Equality\NeighbourhoodSummaryEqualityComparer.cs" />
+    <Compile Include="ForceTests.cs" />
+    <Compile Include="LocateNeighbourhoodTests.cs" />
+    <Compile Include="NeighbourhoodsTests.cs" />
+    <Compile Include="StreetLevelAvailabilityTests.cs" />
+    <Compile Include="ForcesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StreetLevelCrimes.cs" />
+    <Compile Include="CrimesTests.cs" />
+    <Compile Include="StreetLevelCrimesTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -71,13 +77,16 @@
     <EmbeddedResource Include="TestData\Forces.Multiple.json" />
     <EmbeddedResource Include="TestData\Forces.Single.json" />
     <EmbeddedResource Include="TestData\Malformed.json" />
-    <EmbeddedResource Include="TestData\StreetLevelCrimes.Multiple.json" />
-    <EmbeddedResource Include="TestData\StreetLevelCrimes.Single.json" />
+    <EmbeddedResource Include="TestData\Crimes.Multiple.json" />
+    <EmbeddedResource Include="TestData\Crimes.Single.json" />
     <EmbeddedResource Include="TestData\StreetLevelAvailability.Single.json" />
     <EmbeddedResource Include="TestData\StreetLevelAvailability.Multiple.json" />
+    <EmbeddedResource Include="TestData\Neighbourhoods.Multiple.json" />
+    <EmbeddedResource Include="TestData\Neighbourhoods.Single.json" />
+    <EmbeddedResource Include="TestData\LocateNeighbourhood.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TestData\Force.NotFound.txt" />
+    <EmbeddedResource Include="TestData\NotFound.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PoliceUK\PoliceUK.csproj">

@@ -5,6 +5,7 @@
     using Entities.StreetLevel;
     using NUnit.Framework;
     using PoliceUk;
+    using Entities.Neighbourhood;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -12,6 +13,12 @@
     [TestFixture]
     public class PoliceUkClientTests
     {
+        private const string ForceId = "metropolitan";
+
+        private const string LocationId = "883456";
+
+        #region CrimeCategories
+
         [Test]
         public void CrimeCategories_Call_Returns_Results()
         {
@@ -23,6 +30,10 @@
             Assert.That(categories, Is.Not.Null.And.Not.Empty);
             Assert.IsNotNull(categories.First().Url);
         }
+
+        #endregion
+
+        #region StreetLevelCrimes
 
         [Test]
         public void StreetLevelCrimes_Point_Call_Returns_Results()
@@ -65,6 +76,10 @@
             Assert.IsNotNull(crime.Id);
         }
 
+        #endregion
+
+        #region Forces
+
         [Test]
         public void Forces_Call_Returns_Results()
         {
@@ -79,12 +94,16 @@
             Assert.IsNotNull(force.Id);
         }
 
+        #endregion
+
+        #region Force
+
         [Test]
         public void Force_Call_Returns_Result()
         {
             var policeApi = new PoliceUkClient();
 
-            ForceDetails force = policeApi.Force("leicestershire");
+            ForceDetails force = policeApi.Force(ForceId);
 
             // Assert
             Assert.IsNotNull(force);
@@ -102,16 +121,135 @@
             Assert.IsNull(force);
         }
 
+        #endregion
+
+        #region StreetLevelAvailability
+
         [Test]
         public void StreetLevelAvailability_Call_Returns_Results()
         {
             var policeApi = new PoliceUkClient();
 
-            IEnumerable<Availability> availableCrimeDates 
+            IEnumerable<DateTime> availableCrimeDates 
                 = policeApi.StreetLevelAvailability();
 
             // Assert
             Assert.That(availableCrimeDates, Is.Not.Null.And.Not.Empty);
         }
+
+        #endregion
+
+        #region Neighbourhoods
+
+        [Test]
+        public void Neighbourhoods_Call_Returns_Result()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<NeighbourhoodSummary> summeries
+                = policeApi.Neighbourhoods(ForceId);
+
+            // Assert
+            Assert.That(summeries, Is.Not.Null.And.Not.Empty);
+        }
+
+        #endregion
+
+        #region LocateNeighbourhood
+
+        [Test]
+        public void LocateNeighbourhood_Call_Returns_Null()
+        {
+            var policeApi = new PoliceUkClient();
+
+            NeighbourhoodForce neighbourhoodForce
+                = policeApi.LocateNeighbourhood(new Geoposition(42.3329154, 10.30963898));
+
+            // Assert
+            Assert.That(neighbourhoodForce, Is.Null);
+        }
+
+        [Test]
+        public void LocateNeighbourhood_Call_Returns_Result()
+        {
+            var policeApi = new PoliceUkClient();
+
+            NeighbourhoodForce neighbourhoodForce
+                = policeApi.LocateNeighbourhood(new Geoposition(51.13317391, -0.98909205));
+
+            // Assert
+            Assert.That(neighbourhoodForce, Is.Not.Null);
+        }
+
+        #endregion
+
+        #region Crimes
+        
+        [Test]
+        public void Crimes_Call_Without_Date_Returns_Results()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<Crime> crimes = policeApi.Crimes(ForceId, "all-crime");
+
+            // Assert
+            Assert.That(crimes, Is.Not.Null.And.Not.Empty);
+
+            Crime crime = crimes.First();
+            Assert.IsNotNull(crime.Id);
+        }
+
+        [Test]
+        public void Crimes_Call_With_Date_Returns_Results()
+        {
+            var policeApi = new PoliceUkClient();
+
+            DateTime thisDateLastYear = DateTime.Now.Subtract(TimeSpan.FromDays(365));
+            IEnumerable<Crime> crimes = policeApi.Crimes(ForceId, "all-crime", thisDateLastYear);
+
+            // Assert
+            Assert.That(crimes, Is.Not.Null.And.Not.Empty);
+
+            Crime crime = crimes.First();
+            Assert.IsNotNull(crime.Id);
+        }
+
+        #endregion
+
+        #region CrimesAtLocation
+
+        [Test]
+        public void CrimesAtLocation_Call_With_LocationId_Returns_Results()
+        {
+            var policeApi = new PoliceUkClient();
+
+            DateTime thisDateLastYear = DateTime.Now.Subtract(TimeSpan.FromDays(365));
+            IEnumerable<Crime> crimes = policeApi.CrimesAtLocation(LocationId, thisDateLastYear);
+
+            // Assert
+            Assert.That(crimes, Is.Not.Null.And.Not.Empty);
+
+            Crime crime = crimes.First();
+            Assert.IsNotNull(crime.Id);
+        }
+
+        [Test]
+        public void CrimesAtLocation_Call_With_GeoPosition_Returns_Results()
+        {
+            var policeApi = new PoliceUkClient();
+
+            Geoposition position = new Geoposition(51.513016, -0.10231);
+            DateTime thisDateLastYear = DateTime.Now.Subtract(TimeSpan.FromDays(365));
+
+            IEnumerable<Crime> crimes = policeApi.CrimesAtLocation(position, thisDateLastYear);
+
+            // Assert
+            Assert.That(crimes, Is.Not.Null.And.Not.Empty);
+
+            Crime crime = crimes.First();
+            Assert.IsNotNull(crime.Id);
+        }
+
+        #endregion
     }
 }

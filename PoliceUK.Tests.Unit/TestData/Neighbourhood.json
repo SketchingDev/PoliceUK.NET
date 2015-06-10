@@ -1,0 +1,39 @@
+﻿{
+    "url_force": "http://www.example.com/",
+    "contact_details": {
+        "mobile": "07884 117276",
+        "email": "ChadwellHeath.snt@met.police.uk",
+        "telephone": "020 8721 2902"
+    },
+    "name": "Chadwell Heath",
+    "links": [
+        {
+            "url": "http://www.example.com/2",
+            "description": "This is an example description",
+            "title": "Chadwell Heath Saferneighbourhoods Team"
+        },
+        {
+            "url": "http://www.example.com/3",
+            "description": "This is another example description",
+            "title": "Local Crime"
+        }
+    ],
+    "centre": {
+        "latitude": "51.5851",
+        "longitude": "0.138774"
+    },
+    "locations": [
+        {
+            "name": "Example Station",
+            "longitude": "0.1",
+            "postcode": "RM6 5JU",
+            "address": "Marks Gate Police Station, 78 Rose Lane, Romford",
+            "latitude": "51.6",
+            "type": "station",
+            "description": "This is yet another example description"
+        }
+    ],
+    "description": "Welcome to the Chadwell Heath Safer Neighbourhoods Team page.<br/>Our team is comprised of Police Officers and Police Community Support Officers (PCSOs) and we are dedicated to making your neighbourhood a safer place to live in, work in and visit. We listen and talk to you, and find out what affects your daily life and feelings of security. Our priorities are then set by the local community and we work with you and other agencies to find a lasting solution.<br/>You can contact us via e-mail or phone. As part of the Policing Pledge we will respond to every message directed to us within 24 hours. However, we are not a 24-hour response team, so if it is an emergency please call 999.<br/>For more information about local policing visit the main <a href=\"http://www.met.police.uk/saferneighbourhoods/\" title=\"Safer Neighbourhoods Website\">Safer Neighbourhoods website</a>.<br/>For more information about local crime statistics in your ward, please visit the <a href=\"http://maps.met.police.uk/index.php?areacode=00ABGA\" title=\"local crime maps website\">local crime maps website</a> for Chadwell Heath Safer Neighbourhoods Team.",
+    "id": "00ABGA",
+    "population": "10021"
+}

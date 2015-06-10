@@ -46,6 +46,11 @@
     <Compile Include="BaseMethodTests.cs" />
     <Compile Include="CrimeCategoriesTests.cs" />
     <Compile Include="CrimesAtLocationTests.cs" />
+    <Compile Include="CustomAssertions\Equality\NeighbourhoodDetails\NeighbourhoodLocationEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\NeighbourhoodDetails\LinkEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\NeighbourhoodDetails\ContactDetailsEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\NeighbourhoodDetails\NeighbourhoodDetailsEqualityComparer.cs" />
+    <Compile Include="NeighbourhoodTests.cs" />
     <Compile Include="TestDataFactories\CrimeDataFactory.cs" />
     <Compile Include="CustomAssertions\CustomAssert.cs" />
     <Compile Include="CustomAssertions\Equality\AbstractEqualityComparer.cs" />
@@ -84,6 +89,7 @@
     <EmbeddedResource Include="TestData\Neighbourhoods.Multiple.json" />
     <EmbeddedResource Include="TestData\Neighbourhoods.Single.json" />
     <EmbeddedResource Include="TestData\LocateNeighbourhood.json" />
+    <EmbeddedResource Include="TestData\Neighbourhood.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TestData\NotFound.txt" />

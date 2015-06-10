@@ -11,7 +11,11 @@
         [DataMember(Name = "name")]
         public string Name { get; set; }
 
-        public IGeoposition Position { get; set; } // XXX Derive from same level lat/lng properties
+        [DataMember(Name = "latitude")]
+        public double? Latitude { get; set; }
+
+        [DataMember(Name = "longitude")]
+        public double? Longitude { get; set; }
 
         [DataMember(Name = "address")]
         public string Address { get; set; }

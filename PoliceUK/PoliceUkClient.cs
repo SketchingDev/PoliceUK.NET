@@ -141,6 +141,31 @@
             return response.Data;
         }
 
+        public NeighbourhoodDetails Neighbourhood(string forceId, string id)
+        {
+            if (forceId == null)
+            {
+                throw new ArgumentNullException("forceId");
+            }
+
+            if (id == null)
+            {
+                throw new ArgumentNullException("id");
+            }
+
+            string url = string.Format("{0}{1}/{2}", ApiPath, forceId, id);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+
+            ParsedResponse<NeighbourhoodDetails> response = ProcessRequest(request, x =>
+            {
+                // Do not automatically parse response, as if force is not found then non-json response returned
+                return (x.StatusCode == HttpStatusCode.OK) ? JsonResponseProcessor<NeighbourhoodDetails>(x) : null;
+            });
+
+            return response.Data;
+        }
+
         public NeighbourhoodForce LocateNeighbourhood(IGeoposition position) // TODO Rename to just 'neighbourhood'
         {
             if (position == null)

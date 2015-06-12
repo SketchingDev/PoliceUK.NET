@@ -22,7 +22,7 @@
             Assert.AreEqual(ContactDetailsOne.Rss, ContactDetailsTwo.Rss);
             Assert.AreEqual(ContactDetailsOne.Telephone, ContactDetailsTwo.Telephone);
             Assert.AreEqual(ContactDetailsOne.Twitter, ContactDetailsTwo.Twitter);
-            Assert.AreEqual(ContactDetailsOne.Web, ContactDetailsTwo.Web);
+            Assert.AreEqual(ContactDetailsOne.Website, ContactDetailsTwo.Website);
             Assert.AreEqual(ContactDetailsOne.YouTube, ContactDetailsTwo.YouTube);
 
             return true;

@@ -195,6 +195,43 @@
 
         #endregion
 
+        #region NeighbourhoodBoundary
+
+        [Test]
+        public void NeighbourhoodBoundary_Call_Returns_Result()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<Geoposition> positions = policeApi.NeighbourhoodBoundary(ForceId, NeighbourhoodId);
+
+            // Assert
+            Assert.That(positions, Is.Not.Null.And.Not.Empty);
+        }
+
+        [Test]
+        public void NeighbourhoodBoundary_Call_With_No_Force_Returns_Null()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<Geoposition> positions = policeApi.NeighbourhoodBoundary("", NeighbourhoodId);
+
+            // Assert
+            Assert.IsNull(positions);
+        }
+
+        [Test]
+        public void NeighbourhoodBoundary_Call_With_No_ID_Returns_Null()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<Geoposition> positions = policeApi.NeighbourhoodBoundary("", NeighbourhoodId);
+
+            // Assert
+            Assert.IsNull(positions);
+        }
+
+        #endregion
+
         #region LocateNeighbourhood
 
         [Test]

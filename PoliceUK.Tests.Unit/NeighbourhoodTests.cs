@@ -22,7 +22,8 @@
                 {
                     Mobile = "07884 117276",
                     Email = "ChadwellHeath.snt@met.police.uk",
-                    Telephone = "020 8721 2902"
+                    Telephone = "020 8721 2902",
+                    Website = "http://www.example.com"
                 },
                 Name = "Chadwell Heath",
                 Links = new Link[]

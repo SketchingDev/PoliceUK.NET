@@ -159,8 +159,33 @@
 
             ParsedResponse<NeighbourhoodDetails> response = ProcessRequest(request, x =>
             {
-                // Do not automatically parse response, as if force is not found then non-json response returned
+                // Do not automatically parse response, as if neighbourhood is not found then non-json response returned
                 return (x.StatusCode == HttpStatusCode.OK) ? JsonResponseProcessor<NeighbourhoodDetails>(x) : null;
+            });
+
+            return response.Data;
+        }
+
+        public IEnumerable<Geoposition> NeighbourhoodBoundary(string forceId, string id)
+        {
+            if (forceId == null)
+            {
+                throw new ArgumentNullException("forceId");
+            }
+
+            if (id == null)
+            {
+                throw new ArgumentNullException("id");
+            }
+        
+            string url = string.Format("{0}{1}/{2}/boundary", ApiPath, forceId, id);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+
+            ParsedResponse<Geoposition[]> response = ProcessRequest(request, x =>
+            {
+                // Do not automatically parse response, as if neighbourhood is not found then non-json response returned
+                return (x.StatusCode == HttpStatusCode.OK) ? JsonResponseProcessor<Geoposition[]>(x) : null;
             });
 
             return response.Data;

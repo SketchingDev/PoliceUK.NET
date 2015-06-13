@@ -15,6 +15,8 @@
     {
         private const string ForceId = "metropolitan";
 
+        private const string NeighbourhoodId = "00ABGA"; //Chadwell Heath
+
         private const string LocationId = "883456";
 
         #region CrimeCategories
@@ -155,6 +157,81 @@
 
         #endregion
 
+        #region Neighbourhood
+
+        [Test]
+        public void Neighbourhood_Call_Returns_Result()
+        {
+            var policeApi = new PoliceUkClient();
+
+            NeighbourhoodDetails neighbourhood = policeApi.Neighbourhood(ForceId, NeighbourhoodId);
+
+            // Assert
+            Assert.IsNotNull(neighbourhood);
+            Assert.IsNotNull(neighbourhood.Id);
+        }
+
+        [Test]
+        public void Neighbourhood_Call_With_No_Force_Returns_Null()
+        {
+            var policeApi = new PoliceUkClient();
+
+            NeighbourhoodDetails neighbourhood = policeApi.Neighbourhood("", NeighbourhoodId);
+
+            // Assert
+            Assert.IsNull(neighbourhood);
+        }
+
+        [Test]
+        public void Neighbourhood_Call_With_No_ID_Returns_Null()
+        {
+            var policeApi = new PoliceUkClient();
+
+            NeighbourhoodDetails neighbourhood = policeApi.Neighbourhood("", NeighbourhoodId);
+
+            // Assert
+            Assert.IsNull(neighbourhood);
+        }
+
+        #endregion
+
+        #region NeighbourhoodBoundary
+
+        [Test]
+        public void NeighbourhoodBoundary_Call_Returns_Result()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<Geoposition> positions = policeApi.NeighbourhoodBoundary(ForceId, NeighbourhoodId);
+
+            // Assert
+            Assert.That(positions, Is.Not.Null.And.Not.Empty);
+        }
+
+        [Test]
+        public void NeighbourhoodBoundary_Call_With_No_Force_Returns_Null()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<Geoposition> positions = policeApi.NeighbourhoodBoundary("", NeighbourhoodId);
+
+            // Assert
+            Assert.IsNull(positions);
+        }
+
+        [Test]
+        public void NeighbourhoodBoundary_Call_With_No_ID_Returns_Null()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<Geoposition> positions = policeApi.NeighbourhoodBoundary("", NeighbourhoodId);
+
+            // Assert
+            Assert.IsNull(positions);
+        }
+
+        #endregion
+
         #region LocateNeighbourhood
 
         [Test]
@@ -238,7 +315,7 @@
         {
             var policeApi = new PoliceUkClient();
 
-            Geoposition position = new Geoposition(51.513016, -0.10231);
+            Geoposition position = new Geoposition(51.516674, -0.176933);
             DateTime thisDateLastYear = DateTime.Now.Subtract(TimeSpan.FromDays(365));
 
             IEnumerable<Crime> crimes = policeApi.CrimesAtLocation(position, thisDateLastYear);

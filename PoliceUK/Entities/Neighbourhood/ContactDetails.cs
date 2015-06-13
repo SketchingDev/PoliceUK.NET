@@ -32,8 +32,8 @@
         /// <summary>
         /// Website address.
         /// </summary>
-        [DataMember(Name = "web")]
-        public string Web { get; set; }
+        [DataMember(Name = "website")]
+        public string Website { get; set; }
 
         /// <summary>
         /// Street address.

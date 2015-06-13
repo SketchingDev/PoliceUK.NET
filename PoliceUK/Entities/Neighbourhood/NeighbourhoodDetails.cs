@@ -44,7 +44,7 @@
         /// </summary>
         /// <remarks>This may not be exactly in the centre of the neighbourhood.</remarks>
         [DataMember(Name = "centre")]
-        public IGeoposition Centre { get; set; }
+        public Geoposition Centre { get; set; }
 
         /// <summary>
         /// Any associated locations with the neighbourhood, e.g. police stations.

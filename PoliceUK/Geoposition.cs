@@ -2,13 +2,13 @@ namespace PoliceUk
 {
     public class Geoposition : IGeoposition
     {
-        public double Latitiude {get; private set;}
+        public double Latitude {get; private set;}
 
         public double Longitude {get; private set;}
 
         public Geoposition(double latitude, double longitude)
         {
-            this.Latitiude = latitude;
+            this.Latitude = latitude;
             this.Longitude = longitude;
         }
     }

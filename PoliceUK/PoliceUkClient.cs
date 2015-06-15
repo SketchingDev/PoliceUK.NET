@@ -29,7 +29,7 @@
             }
 
             string url = string.Format("{0}crimes-street/all-crime?lat={1}&lng={2}", ApiPath,
-                position.Latitiude,
+                position.Latitude,
                 position.Longitude);
 
             if (date.HasValue) url += string.Format("&date={0:yyyy'-'MM}", date.Value);
@@ -55,7 +55,7 @@
             string url = string.Format("{0}crimes-street/all-crime", ApiPath);
 
             // Post data
-            IEnumerable<string> polygonSections = polygon.Select(T => T.Latitiude.ToString() + "," + T.Longitude.ToString());
+            IEnumerable<string> polygonSections = polygon.Select(T => T.Latitude.ToString() + "," + T.Longitude.ToString());
             string postData = "poly=" + string.Join(":", polygonSections.ToArray());
             if (date.HasValue) postData += string.Format("&date={0:yyyy'-'MM}", date.Value);
 
@@ -199,7 +199,7 @@
             }
 
             string url = string.Format("{0}locate-neighbourhood?q={1},{2}", ApiPath,
-                position.Latitiude, 
+                position.Latitude, 
                 position.Longitude);
 
             IHttpWebRequest request = BuildGetWebRequest(url);
@@ -256,7 +256,7 @@
             }
 
             string url = string.Format("{0}crimes-at-location?lat={1}&lng={2}&date={3:yyyy'-'MM}", ApiPath,
-                position.Latitiude,
+                position.Latitude,
                 position.Longitude,
                 date);
 

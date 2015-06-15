@@ -2,7 +2,7 @@
 {
     public interface IGeoposition 
     {
-        double Latitiude {get;}
+        double Latitude {get;}
 
         double Longitude {get;}
     }

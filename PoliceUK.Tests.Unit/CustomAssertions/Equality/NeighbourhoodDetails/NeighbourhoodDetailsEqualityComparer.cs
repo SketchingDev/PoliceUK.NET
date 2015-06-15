@@ -17,7 +17,7 @@
 
             if (NeighbourhoodDetailsOne.Centre != null || NeighbourhoodDetailsTwo.Centre != null)
             {
-                Assert.AreEqual(NeighbourhoodDetailsOne.Centre.Latitiude, NeighbourhoodDetailsTwo.Centre.Latitiude);
+                Assert.AreEqual(NeighbourhoodDetailsOne.Centre.Latitude, NeighbourhoodDetailsTwo.Centre.Latitude);
                 Assert.AreEqual(NeighbourhoodDetailsOne.Centre.Longitude, NeighbourhoodDetailsTwo.Centre.Longitude);
             }
 

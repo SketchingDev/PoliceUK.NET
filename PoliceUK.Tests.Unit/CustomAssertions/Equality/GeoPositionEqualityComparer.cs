@@ -6,7 +6,7 @@
     {
         public override bool AreEqual(Geoposition GeopositionOne, Geoposition GeopositionTwo)
         {
-            Assert.AreEqual(GeopositionOne.Latitiude, GeopositionTwo.Latitiude);
+            Assert.AreEqual(GeopositionOne.Latitude, GeopositionTwo.Latitude);
             Assert.AreEqual(GeopositionOne.Longitude, GeopositionTwo.Longitude);            
 
             return true;

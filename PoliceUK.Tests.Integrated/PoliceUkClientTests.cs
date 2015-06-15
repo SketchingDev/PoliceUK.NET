@@ -215,7 +215,7 @@
 
             IEnumerable<Geoposition> positions = policeApi.NeighbourhoodBoundary("", NeighbourhoodId);
 
-            // Assert
+            // Assertpol
             Assert.IsNull(positions);
         }
 

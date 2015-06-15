@@ -77,7 +77,7 @@
                     policeApi.StreetLevelCrimes(geoPosition);
 
                     // Assert
-                    string latitude  = geoPosition.Latitiude.ToString();
+                    string latitude  = geoPosition.Latitude.ToString();
                     string longitude = geoPosition.Longitude.ToString();
 
                     IHttpWebRequestFactory factory = policeApi.RequestFactory;

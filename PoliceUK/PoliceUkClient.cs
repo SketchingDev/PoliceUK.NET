@@ -266,6 +266,18 @@
             return response.Data;
         }
 
+        //TODO Output array of DateTime, no benefit to Availability wrapper
+        public DateTime LastUpdated()
+        {
+            string url = string.Format("{0}crime-last-updated", ApiPath);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+            ParsedResponse<LastUpdated> response = ProcessJsonRequest<LastUpdated>(request);
+
+            LastUpdated lastUpdated = response.Data;
+            return lastUpdated.Date;
+        }
+
         /// <summary>
         /// Processes the JSON response from a HTTP request.
         /// This can be used in most cases except for API calls that respond with

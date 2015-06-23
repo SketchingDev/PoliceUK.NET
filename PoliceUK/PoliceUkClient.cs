@@ -114,7 +114,6 @@
             return response.Data;
         }
 
-        //TODO Output array of DateTime, no benefit to Availability wrapper
         public IEnumerable<DateTime> StreetLevelAvailability()
         {
             string url = string.Format("{0}crimes-street-dates", ApiPath);
@@ -266,7 +265,6 @@
             return response.Data;
         }
 
-        //TODO Output array of DateTime, no benefit to Availability wrapper
         public DateTime LastUpdated()
         {
             string url = string.Format("{0}crime-last-updated", ApiPath);

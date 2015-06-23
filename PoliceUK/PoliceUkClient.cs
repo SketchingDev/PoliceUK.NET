@@ -114,7 +114,6 @@
             return response.Data;
         }
 
-        //TODO Output array of DateTime, no benefit to Availability wrapper
         public IEnumerable<DateTime> StreetLevelAvailability()
         {
             string url = string.Format("{0}crimes-street-dates", ApiPath);
@@ -264,6 +263,17 @@
             ParsedResponse<Crime[]> response = ProcessJsonRequest<Crime[]>(request);
 
             return response.Data;
+        }
+
+        public DateTime LastUpdated()
+        {
+            string url = string.Format("{0}crime-last-updated", ApiPath);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+            ParsedResponse<LastUpdated> response = ProcessJsonRequest<LastUpdated>(request);
+
+            LastUpdated lastUpdated = response.Data;
+            return lastUpdated.Date;
         }
 
         /// <summary>

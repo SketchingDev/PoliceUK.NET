@@ -53,6 +53,7 @@
     <Compile Include="CustomAssertions\Equality\NeighbourhoodDetails\NeighbourhoodDetailsEqualityComparer.cs" />
     <Compile Include="NeighbourhoodBoundaryTests.cs" />
     <Compile Include="NeighbourhoodTests.cs" />
+    <Compile Include="LastUpdatedTests.cs" />
     <Compile Include="TestDataFactories\CrimeDataFactory.cs" />
     <Compile Include="CustomAssertions\CustomAssert.cs" />
     <Compile Include="CustomAssertions\Equality\AbstractEqualityComparer.cs" />
@@ -93,6 +94,7 @@
     <EmbeddedResource Include="TestData\LocateNeighbourhood.json" />
     <EmbeddedResource Include="TestData\Neighbourhood.json" />
     <EmbeddedResource Include="TestData\NeighbourhoodBoundary.Multiple.json" />
+    <EmbeddedResource Include="TestData\LastUpdated.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TestData\NotFound.txt" />

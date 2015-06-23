@@ -51,6 +51,7 @@
     <Compile Include="Entities\Neighbourhood\NeighbourhoodLocation.cs" />
     <Compile Include="Entities\Neighbourhood\NeighbourhoodPriority.cs" />
     <Compile Include="Entities\Neighbourhood\NeighbourhoodSummary.cs" />
+    <Compile Include="Entities\StreetLevel\LastUpdated.cs" />
     <Compile Include="Entities\StreetLevel\Crime.cs" />
     <Compile Include="Entities\Force\ForceDetails.cs" />
     <Compile Include="Entities\Force\ForceSummary.cs" />

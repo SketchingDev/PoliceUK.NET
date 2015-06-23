@@ -328,5 +328,20 @@
         }
 
         #endregion
+
+        #region LastUpdated
+
+        [Test]
+        public void LastUpdated_Call_Returns_Result()
+        {
+            var policeApi = new PoliceUkClient();
+
+            DateTime lastUpdated = policeApi.LastUpdated();
+
+            // Assert
+            Assert.That(lastUpdated, Is.Not.Null);
+        }
+
+        #endregion
     }
 }

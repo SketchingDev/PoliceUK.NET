@@ -2,9 +2,6 @@
 ============
 An API wrapper for the [Police UK][police-api] API.
 
-Installation
-------------
-Download the [latest release][latest-release] and add a reference to `PoliceUK.dll` in your project.
 
 Example Usages
 --------------
@@ -30,9 +27,27 @@ foreach (Crime crime in results.Crimes)
 }
 ```
 
+
+Installation
+------------
+
+### NuGet
+
+Run the following command in the Package Manager Console 
+
+```
+PM> Install-Package PoliceUK 
+```
+
+### Manually
+
+Download the [latest release][latest-release] and add a reference to `PoliceUK.dll` in your project.
+
+
 Prerequisites
 -------------
 .NET 3.5+ or Mono.
+
 
 License
 -------

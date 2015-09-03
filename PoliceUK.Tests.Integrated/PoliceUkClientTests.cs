@@ -15,7 +15,7 @@
     {
         private const string ForceId = "metropolitan";
 
-        private const string NeighbourhoodId = "00ABGA"; //Chadwell Heath
+        private const string NeighbourhoodId = "E05000029"; //Chadwell Heath
 
         private const string LocationId = "883456";
 

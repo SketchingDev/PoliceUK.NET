@@ -17,7 +17,7 @@
     // TODO Make Async
     public class PoliceUkClient : HttpClient, IPoliceUkClient
     {
-        private const string ApiPath = "http://data.police.uk/api/";
+        private const string ApiPath = "https://data.police.uk/api/";
 
         public PoliceUkClient(): base(new HttpWebRequestFactory()){}
 

@@ -232,6 +232,80 @@
 
         #endregion
 
+        #region NeighbourhoodTeam
+
+        [Test]
+        public void NeighbourhoodTeam_Call_Returns_Result()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<NeighbourhoodTeamMember> members = policeApi.NeighbourhoodTeam(ForceId, NeighbourhoodId);
+
+            // Assert
+            Assert.That(members, Is.Not.Null.And.Not.Empty);
+        }
+
+        [Test]
+        public void NeighbourhoodTeam_Call_With_No_Force_Returns_Null()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<NeighbourhoodTeamMember> members = policeApi.NeighbourhoodTeam("", NeighbourhoodId);
+
+            // Assert
+            Assert.IsNull(members);
+        }
+
+        [Test]
+        public void NeighbourhoodTeam_Call_With_No_ID_Returns_Null()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<NeighbourhoodTeamMember> members = policeApi.NeighbourhoodTeam(ForceId, "");
+
+            // Assert
+            Assert.IsNull(members);
+        }
+
+        #endregion
+
+        #region NeighbourhoodEvents
+
+        [Test]
+        public void NeighbourhoodEvents_Call_Returns_Result()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<NeighbourhoodEvent> events = policeApi.NeighbourhoodEvents(ForceId, NeighbourhoodId);
+
+            // Assert
+            Assert.That(events, Is.Not.Null.And.Not.Empty);
+        }
+
+        [Test]
+        public void NeighbourhoodEvents_Call_With_No_Force_Returns_Null()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<NeighbourhoodEvent> events = policeApi.NeighbourhoodEvents("", NeighbourhoodId);
+
+            // Assert
+            Assert.IsNull(events);
+        }
+
+        [Test]
+        public void NeighbourhoodEvents_Call_With_No_ID_Returns_Null()
+        {
+            var policeApi = new PoliceUkClient();
+
+            IEnumerable<NeighbourhoodEvent> events = policeApi.NeighbourhoodEvents(ForceId, "");
+
+            // Assert
+            Assert.IsNull(events);
+        }
+
+        #endregion
+
         #region LocateNeighbourhood
 
         [Test]

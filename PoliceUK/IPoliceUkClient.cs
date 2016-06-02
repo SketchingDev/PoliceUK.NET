@@ -105,5 +105,21 @@
         /// </param>
         /// <returns>Crimes which occurred at the specified location, rather than those within a radius</returns>
         IEnumerable<Crime> CrimesAtLocation(IGeoposition position, DateTime date);
+
+        /// <summary>
+        /// Returns the members of the team of a specific neighbourhood for a specific police force
+        /// </summary>
+        /// <param name="forceId">police force id of the requested neighbourhood team</param>
+        /// <param name="neighbourhoodId">neighbourhood id of the requested team</param>
+        /// <returns>List of Team Members for the requested neighbourhood</returns>
+        IEnumerable<NeighbourhoodTeamMember> NeighbourhoodTeam(string forceId,string neighbourhoodId);
+
+        /// <summary>
+        /// Returns the events of a specific neighbourhood for a specific police force
+        /// </summary>
+        /// <param name="forceId">police force id of the requested neighbourhood events</param>
+        /// <param name="neighbourhoodId">neighbourhood id of the requested events</param>
+        /// <returns>List of events for the requested neighbourhood</returns>
+        IEnumerable<NeighbourhoodEvent> NeighbourhoodEvents(string forceId, string neighbourhoodId);
     }
 }

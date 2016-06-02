@@ -50,6 +50,8 @@
     <Compile Include="Entities\Neighbourhood\NeighbourhoodForce.cs" />
     <Compile Include="Entities\Neighbourhood\NeighbourhoodLocation.cs" />
     <Compile Include="Entities\Neighbourhood\NeighbourhoodPriority.cs" />
+    <Compile Include="Entities\Neighbourhood\NeighbourhoodEvent.cs" />
+    <Compile Include="Entities\Neighbourhood\NeighbourhoodTeamMember.cs" />
     <Compile Include="Entities\Neighbourhood\NeighbourhoodSummary.cs" />
     <Compile Include="Entities\StreetLevel\LastUpdated.cs" />
     <Compile Include="Entities\StreetLevel\Crime.cs" />

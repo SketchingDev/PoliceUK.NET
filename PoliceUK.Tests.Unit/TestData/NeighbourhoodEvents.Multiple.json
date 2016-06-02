@@ -1,0 +1,28 @@
+﻿[
+{
+        "contact_details": {
+            "mobile": "07884 117276",
+            "email": "ChadwellHeath.snt@met.police.uk",
+            "telephone": "020 8721 2902",
+            "website":  "http://www.example.com"
+        },
+        "description": "desc1",
+        "title": "Aikman Avenue beat surgery",
+        "address": "Library, Aikman Avenue",
+        "type": "meeting",
+        "start_date": "2011-11-02T10:00:00"
+    },
+    {
+        "contact_details": {
+            "mobile": "07884 117276",
+            "email": "ChadwellHeath.snt@met.police.uk",
+            "telephone": "020 8721 2902",
+            "website":  "http://www.example.com"
+        },
+        "description": "desc2",
+        "title": "Bateman Road beat surgery",
+        "address": "Hand in Hand, Bateman Road",
+        "type": "meeting",
+        "start_date": "2011-11-02T18:30:00"
+    }
+]

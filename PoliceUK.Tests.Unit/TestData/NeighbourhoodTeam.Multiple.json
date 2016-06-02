@@ -1,0 +1,24 @@
+﻿[
+    {
+        "bio": "bio1",
+        "contact_details": {
+            "mobile": "07884 117276",
+            "email": "ChadwellHeath.snt@met.police.uk",
+            "telephone": "020 8721 2902",
+            "website":  "http://www.example.com"
+        },
+        "name": "Adam Wardle",
+        "rank": "Sgt"
+    },
+    {
+        "bio": "bio2",
+        "contact_details": {
+            "mobile": "07884 117276",
+            "email": "ChadwellHeath.snt@met.police.uk",
+            "telephone": "020 8721 2902",
+            "website":  "http://www.example.com"
+        },
+        "name": "Dave Marlow",
+        "rank": "PC"
+    }
+]

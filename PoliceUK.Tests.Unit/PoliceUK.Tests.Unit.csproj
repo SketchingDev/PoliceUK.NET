@@ -47,11 +47,15 @@
     <Compile Include="CrimeCategoriesTests.cs" />
     <Compile Include="CrimesAtLocationTests.cs" />
     <Compile Include="CustomAssertions\Equality\GeopositionEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\NeighbourhoodDetails\NeighbourhoodTeamMemberEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\NeighbourhoodDetails\NeighbourhoodLocationEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\NeighbourhoodDetails\LinkEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\NeighbourhoodDetails\ContactDetailsEqualityComparer.cs" />
     <Compile Include="CustomAssertions\Equality\NeighbourhoodDetails\NeighbourhoodDetailsEqualityComparer.cs" />
+    <Compile Include="CustomAssertions\Equality\NeighbourhoodDetails\NeighbourhoodEventEqualityComparer.cs" />
     <Compile Include="NeighbourhoodBoundaryTests.cs" />
+    <Compile Include="NeighbourhoodTeamTest.cs" />
+    <Compile Include="NeighbourhoodEventsTest.cs" />
     <Compile Include="NeighbourhoodTests.cs" />
     <Compile Include="LastUpdatedTests.cs" />
     <Compile Include="TestDataFactories\CrimeDataFactory.cs" />
@@ -95,6 +99,8 @@
     <EmbeddedResource Include="TestData\Neighbourhood.json" />
     <EmbeddedResource Include="TestData\NeighbourhoodBoundary.Multiple.json" />
     <EmbeddedResource Include="TestData\LastUpdated.json" />
+    <EmbeddedResource Include="TestData\NeighbourhoodTeam.Multiple.json" />
+    <EmbeddedResource Include="TestData\NeighbourhoodEvents.Multiple.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TestData\NotFound.txt" />
@@ -104,6 +110,9 @@
       <Project>{77f897f9-db9d-4ed9-a1d7-58f334027388}</Project>
       <Name>PoliceUK</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

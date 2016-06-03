@@ -17,7 +17,7 @@
     // TODO Make Async
     public class PoliceUkClient : HttpClient, IPoliceUkClient
     {
-        private const string ApiPath = "http://data.police.uk/api/";
+        private const string ApiPath = "https://data.police.uk/api/";
 
         public PoliceUkClient(): base(new HttpWebRequestFactory()){}
 
@@ -305,6 +305,57 @@
             }
 
             return data;
+        }
+
+
+        public IEnumerable<NeighbourhoodTeamMember> NeighbourhoodTeam(string forceId, string neighbourhoodId)
+        {
+            if (forceId == null)
+            {
+                throw new ArgumentNullException("forceId");
+            }
+
+            if (neighbourhoodId == null)
+            {
+                throw new ArgumentNullException("neighbourhoodId");
+            }
+
+            string url = string.Format("{0}{1}/{2}/people", ApiPath, forceId, neighbourhoodId);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+
+            ParsedResponse<NeighbourhoodTeamMember[]> response = ProcessRequest(request, x =>
+            {
+                // Do not automatically parse response, as if neighbourhood is not found then non-json response returned
+                return (x.StatusCode == HttpStatusCode.OK) ? JsonResponseProcessor<NeighbourhoodTeamMember[]>(x) : null;
+            });
+
+            return response.Data;
+        }
+
+        public IEnumerable<NeighbourhoodEvent> NeighbourhoodEvents(string forceId, string neighbourhoodId)
+        {
+            if (forceId == null)
+            {
+                throw new ArgumentNullException("forceId");
+            }
+
+            if (neighbourhoodId == null)
+            {
+                throw new ArgumentNullException("neighbourhoodId");
+            }
+
+            string url = string.Format("{0}{1}/{2}/events", ApiPath, forceId, neighbourhoodId);
+
+            IHttpWebRequest request = BuildGetWebRequest(url);
+
+            ParsedResponse<NeighbourhoodEvent[]> response = ProcessRequest(request, x =>
+            {
+                // Do not automatically parse response, as if neighbourhood is not found then non-json response returned
+                return (x.StatusCode == HttpStatusCode.OK) ? JsonResponseProcessor<NeighbourhoodEvent[]>(x) : null;
+            });
+
+            return response.Data;
         }
     }
 }

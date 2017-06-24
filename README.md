@@ -1,6 +1,7 @@
 ﻿PoliceUK.NET [![Build Status](https://travis-ci.org/FlyingTopHat/PoliceUK.NET.svg?branch=master)](https://travis-ci.org/FlyingTopHat/PoliceUK.NET)
 ============
-An API wrapper for the [Police UK][police-api] API.
+
+An API wrapper for the [Police UK][police-api] API that provides easy access to crime data provided by [data.police.uk][police-data].
 
 
 Example Usages
@@ -53,6 +54,11 @@ License
 -------
 PoliceUK.NET is released under the [MIT License][license-file].
 
+The data provided by [data.police.uk][police-data] is covered by the [Open Government Licence v3.0][police-data-licence].
+
+
 [police-api]:http://police.uk/
+[police-data]:https://data.police.uk/
+[police-data-licence]:https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
 [latest-release]:https://github.com/FlyingTopHat/PoliceUK.NET/releases
 [license-file]:LICENSE.txt
